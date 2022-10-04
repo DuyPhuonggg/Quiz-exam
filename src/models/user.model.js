@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
 
 //define model
-const Users = db.define('Users', {  
+const User = db.define('Users', {  
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
@@ -31,7 +31,7 @@ const Users = db.define('Users', {
         allowNull: false,
         validate: {
             is: ["^[a-z]+$",'i'],
-            len:[3,20]
+            len:[8,20]
         }
     },
     email: {
@@ -43,7 +43,6 @@ const Users = db.define('Users', {
             min:3,
         }
     },
-    gender:  DataTypes.STRING,
     address: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -54,8 +53,18 @@ const Users = db.define('Users', {
     freezeTableName: true
 });
 
-await Users.sync({ alter: true }); //Create model
-//Drop model
-// const users_down = await Users.drop();
+await User.sync({ alter: true }); //Create model
 
-module.exports = Users;
+/**
+ * Check if email is taken
+ * @param {string} email - The user's email
+ * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
+ * @returns {Promise<boolean>}
+ */
+User.statics.isEmailTaken = async function (email, excludeUserId) {
+    const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+    return !!user;
+};
+
+
+module.exports = User;
