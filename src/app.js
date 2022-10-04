@@ -2,7 +2,6 @@ import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import initWebRoute from './routes/web';
 
-
 const app = express();
 const port = 3000;
 // database

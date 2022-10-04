@@ -1,3 +1,4 @@
+
 const express = require('express');
 
 let router = express.Router();
@@ -14,4 +15,4 @@ const initWebRoute = (app) => {
     
 }
 
-export default initWebRoute;
+module.exports = initWebRoute
