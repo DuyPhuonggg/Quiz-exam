@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
 
-//define model
 const User = db.define('Users', {  
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -54,17 +53,5 @@ const User = db.define('Users', {
 });
 
 await User.sync({ alter: true }); //Create model
-
-/**
- * Check if email is taken
- * @param {string} email - The user's email
- * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
- * @returns {Promise<boolean>}
- */
-User.statics.isEmailTaken = async function (email, excludeUserId) {
-    const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
-    return !!user;
-};
-
 
 module.exports = User;
