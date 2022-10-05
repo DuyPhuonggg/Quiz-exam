@@ -10,8 +10,12 @@ db.authenticate()
     .catch(err => console.log('Error ' + err))
 
 //routes
-app.use('/', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+// app.use('/api/question', questionRouter);
+// app.use('/api', (req,res) => {
+//     res.send('hello');
+// })
 
 
 app.listen(port, () => {

@@ -1,9 +1,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
 
-const User = db.define('Users', {  
+const Users = db.define('Users', {  
     id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey:true,
         allowNull: false
@@ -46,12 +46,21 @@ const User = db.define('Users', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    createdAt:  DataTypes.DATE(now()),
-    updatedAt: DataTypes.DATE(now())
+    createdAt:  DataTypes.DATE,
+    updatedAt: DataTypes.DATE
 }, {
     freezeTableName: true
 });
 
-await User.sync({ alter: true }); //Create model
+// (async function() {
+//     // await sequelize.sync({ alter: true }).then(() => { // alter to edit DB after run server
+//     await db.sync().then(() => {
+//     //   logger.info("Sync users Table success!");
+//     });
+//   })().catch((error) => {
+//     // logger.error("Sync users Table fail");
+//     // logger.error(error);
+//   });
+ Users.sync();
 
-module.exports = User;
+module.exports = Users;

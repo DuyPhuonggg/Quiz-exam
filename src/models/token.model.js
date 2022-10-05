@@ -1,9 +1,9 @@
 const db = require('../configs/database');
-const DataTypes = require('sequelize');
+const { DataTypes } = require('sequelize');
 
-const Token = db.define({
+const Token = db.define('Token',{
     id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey:true,
         allowNull: false
@@ -24,12 +24,20 @@ const Token = db.define({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    createdAt:  DataTypes.DATE(now()),
-    expiredAt: DataTypes.DATE(now())
+    createdAt:  DataTypes.DATE,
+    expiredAt: DataTypes.DATE
 }, {
     freezeTableName: true
 });
 
-await Token.sync({ alter : true});
+(async function() {
+    // await sequelize.sync({ alter: true }).then(() => { // alter to edit DB after run server
+    await db.sync().then(() => {
+    //   logger.info("Sync users Table success!");
+    });
+  })().catch((error) => {
+    // console.log("Sync users Table fail").error();
+    // logger.error(error);
+  });
 
 module.exports = Token;
