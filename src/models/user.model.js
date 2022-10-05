@@ -52,15 +52,6 @@ const Users = db.define('Users', {
     freezeTableName: true
 });
 
-// (async function() {
-//     // await sequelize.sync({ alter: true }).then(() => { // alter to edit DB after run server
-//     await db.sync().then(() => {
-//     //   logger.info("Sync users Table success!");
-//     });
-//   })().catch((error) => {
-//     // logger.error("Sync users Table fail");
-//     // logger.error(error);
-//   });
- Users.sync();
+Users.sync();
 
 module.exports = Users;

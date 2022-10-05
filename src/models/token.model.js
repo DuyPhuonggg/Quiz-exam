@@ -30,14 +30,6 @@ const Token = db.define('Token',{
     freezeTableName: true
 });
 
-(async function() {
-    // await sequelize.sync({ alter: true }).then(() => { // alter to edit DB after run server
-    await db.sync().then(() => {
-    //   logger.info("Sync users Table success!");
-    });
-  })().catch((error) => {
-    // console.log("Sync users Table fail").error();
-    // logger.error(error);
-  });
+Token.sync();
 
 module.exports = Token;
