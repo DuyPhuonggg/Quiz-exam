@@ -5,7 +5,15 @@ const { Op } = require("sequelize");
 
 //Create a user
 const createUser = async (data) => {
-  return User.create(data);
+  const {firstName, lastName, username, password, email, address } = data;
+  return User.create({
+    firstName : firstName,
+    lastName: lastName,
+    username: username,
+    password: password,
+    email: email,
+    address: address
+  });
 };
 
 //Get all user
@@ -26,26 +34,34 @@ const findAllUser = async (data) => {
 
 //Get user by id
 const findUserById = async (id) => {
-  return await User.findById(id);
+  return await User.findByPk(id);
 };
 
-//update User by id
+// //update User by id
 const updateUserById = async (userId, body) => {
-  const user = await getUserById(userId);
+  const user = await findUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not dound");
   }
-  if (body.email && (await User.isEmailTaken(body.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
-  }
-  Object.assign(user, body);
-  await user.update();
+  // const {firstName, lastName, username, password, email, address } = body;
+  await user.update({
+    firstName : body.firstName,
+    lastName: body.lastName,
+    username: body.username,
+    password: body.password,
+    email: body.email,
+    address: body.address 
+  }, { 
+    where: {
+      id: userId
+    }
+  });
   return user;
 };
 
 //delete user by id
 const deleteUserById = async (userId) => {
-  const user = await getUserById(userId);
+  const user = await findUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }

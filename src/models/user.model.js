@@ -19,27 +19,18 @@ const Users = db.define('Users', {
     username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        validate: {
-            is: ["^[a-z]+$",'i'],
-            len: [1,50]
-        }
+        unique: true
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            is: ["^[a-z]+$",'i'],
-            len:[8,20]
-        }
+        allowNull: false
     },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
-            isEmail: true,
-            min:3,
+            isEmail: true
         }
     },
     address: {
