@@ -5,7 +5,7 @@ const {
   userRouter,
   authRouter,
   answersRouter,
-  questionRouter,
+  questionsRouter,
   resultsUserRouter,
   scoresRouter
 } = require("./routes/index");
@@ -29,7 +29,7 @@ db.authenticate()
 //routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-app.use("/api/question", questionRouter);
+app.use("/api/questions", questionsRouter);
 // app.use("/api/answers", answersRouter);
 // app.use("/api/results-user", resultsUserRouter);
 // app.use("/api/scores", scoresRouter);
