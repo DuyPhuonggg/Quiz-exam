@@ -7,7 +7,7 @@ const createAnswer = async (req, res) => {
         const answers = await Answers.create({
             question_id: req.body.question_id,
             content: req.body.content,
-            isCorrect: req.body.isCorrect
+            is_correct: req.body.is_correct
         });
         return res.status(200).json({ message: "Successfully", data: answers});
     } catch (err) {
@@ -29,7 +29,12 @@ const getAnswers = async (req,res) => {
 const getAnswerByQuestionId = async (req,res) => {
     try {
         const questionId = req.params.questionId
-        const answers = await Answers.findOne({
+        const answers = await Answers.findAll({
+            attributes: [
+                'id',
+                'content',
+                'is_correct'
+            ],
             where: {
                 question_id: questionId
             }
@@ -37,7 +42,7 @@ const getAnswerByQuestionId = async (req,res) => {
         if(answers === null) {
             res.status(404).json({message: "Not found answers"});
         }
-        return res.status(200).json({ message: "Successfully", data: answers});
+        return res.status(200).json({ message: "Successfully", data: { question : questionId, answers } });
     } catch (err) {
         return res.status(500).json({message: err});
     }
@@ -53,7 +58,7 @@ const updatedAnswer = async (req,res) => {
         await question.update({
                 question_id : req.body.question_id,
                 content: req.body.content,
-                isCorrect: req.body.isCorrect
+                is_correct: req.body.is_correct
             }, { 
                 where: {
                     id: req.params.answersId
@@ -88,4 +93,4 @@ module.exports = {
     getAnswerByQuestionId,
     updatedAnswer,
     deleteAnswer
-} ;
+};
