@@ -10,7 +10,8 @@ const {
   scoresRouter
 } = require("./routes/index");
 const app = express();
-const port = 3000;
+require('dotenv').config();
+const PORT = process.env.PORT;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,6 +35,6 @@ app.use("/api/answers", answersRouter);
 // app.use("/api/results-user", resultsUserRouter);
 // app.use("/api/scores", scoresRouter);
 
-app.listen(port, () => {
-  console.log(`App running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`App running at http://localhost:${PORT}`);
 });

@@ -16,16 +16,12 @@ const Token = db.define('Token',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    accessToken: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     refreshToken: {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    expiredAt: DataTypes.DATE,
     createdAt:  DataTypes.DATE,
-    expiredAt: DataTypes.DATE
 }, {
     freezeTableName: true
 });
