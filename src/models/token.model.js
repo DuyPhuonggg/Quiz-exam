@@ -20,7 +20,6 @@ const Token = db.define('Token',{
         type: DataTypes.STRING,
         allowNull: true,
     },
-    expiredAt: DataTypes.DATE,
     createdAt:  DataTypes.DATE,
 }, {
     freezeTableName: true

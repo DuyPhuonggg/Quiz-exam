@@ -47,8 +47,8 @@ const register = async (req, res) => {
         status: "Registor successfully", 
         content: { 
             user : user, 
+            token: token,
             access_token: accessToken,
-            token: token
         } 
     });
   } catch (err) {
@@ -90,16 +90,36 @@ const login = async (req,res) => {
     } catch (err) {
         return res.status(500).json({ message: err });
     }
-
 };
 
-// const logout = catchAsync(async (req,res) => {
-//     await authServices.logout(req.body.refreshToken);
-//     res.status(httpStatus.NO_CONTENT).send();
-// })
+const logout = async (req,res) => {
+    try {
+        const refreshToken = await Token.findOne({
+            where: {
+                refreshToken: req.body.refreshToken
+            }
+        });
+
+        if (!refreshToken) {
+            throw new ApiError(httpStatus.BAD_REQUEST);
+        }
+
+        await Token.destroy({
+            where: {
+                refreshToken: req.body.refreshToken
+            }
+          });
+          return res.status(200).json({ message: "Log-out successfully" });
+    }   catch (error) {
+        return res.status(500).json({ message: error });
+    }
+};
+
+const refreshToken = async (req,res) => {}
 
 module.exports = {
   register,
   login,
-  // logout
+  logout,
+  refreshToken
 };

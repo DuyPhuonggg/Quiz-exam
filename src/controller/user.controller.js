@@ -1,4 +1,3 @@
-const catchAsync = require("../utils/catchAsync");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const Users = require("../models/user.model");
