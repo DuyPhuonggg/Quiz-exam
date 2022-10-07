@@ -30,7 +30,7 @@ db.authenticate()
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/questions", questionsRouter);
-// app.use("/api/answers", answersRouter);
+app.use("/api/answers", answersRouter);
 // app.use("/api/results-user", resultsUserRouter);
 // app.use("/api/scores", scoresRouter);
 

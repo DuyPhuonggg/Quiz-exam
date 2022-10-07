@@ -2,7 +2,7 @@ const express = require("express");
 const questionsRouter = express.Router();
 const questionsController = require('../../controller/questions.controller');
 
-questionsRouter.post("/posts",questionsController.createQuestion);
+questionsRouter.post("/post",questionsController.createQuestion);
 questionsRouter.get("/", questionsController.getAllQuestion);
 questionsRouter.get("/:questionId", questionsController.getQuestionById);
 questionsRouter.put("/:questionId", questionsController.updatedQuestion);

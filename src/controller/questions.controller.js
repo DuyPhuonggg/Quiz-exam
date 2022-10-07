@@ -23,7 +23,6 @@ const getAllQuestion = async (req,res) => {
     } catch (err) {
         return res.status(500).json({message: err});
     }
-
 }
 
 const getQuestionById = async (req,res) => {
@@ -46,7 +45,7 @@ const updatedQuestion = async (req,res) => {
                 content: req.body.content,
             }, { 
                 where: {
-                    id: req.params.userId
+                    id: req.params.questionId
                 }
             });
         return res.status(200).json({ message: "Successfully", data: question}); 
