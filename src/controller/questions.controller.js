@@ -60,7 +60,7 @@ const deleteQuestion = async (req, res) => {
     if (!question) {
         throw new ApiError(httpStatus.NOT_FOUND, "Not found");
     }
-    await question.destroy({
+    await Questions.destroy({
         where: {
             id: req.params.questionId
         }

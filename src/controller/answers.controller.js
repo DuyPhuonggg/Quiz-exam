@@ -4,12 +4,12 @@ const Answers = require('../models/answers.model');
 
 const createAnswer = async (req, res) => {
     try {
-        const answers = await Answers.create({
+        const answer = await Answers.create({
             question_id: req.body.question_id,
             content: req.body.content,
             is_correct: req.body.is_correct
         });
-        return res.status(200).json({ message: "Successfully", data: answers});
+        return res.status(200).json({ message: "Successfully", data: answer });
     } catch (err) {
         return res.status(500).json({message: err});
     }
@@ -39,7 +39,7 @@ const getAnswerByQuestionId = async (req,res) => {
                 question_id: questionId
             }
         });
-        if(answers === null) {
+        if(answers) {
             res.status(404).json({message: "Not found answers"});
         }
         return res.status(200).json({ message: "Successfully", data: { question : questionId, answers } });
@@ -55,7 +55,7 @@ const updatedAnswer = async (req,res) => {
         if (!answer) {
             throw new ApiError(httpStatus.NOT_FOUND, "Not found");
         }
-        await question.update({
+        await Answers.update({
                 question_id : req.body.question_id,
                 content: req.body.content,
                 is_correct: req.body.is_correct

@@ -1,8 +1,11 @@
 const express = require("express");
 const scoresRouter = express.Router();
+const scoresController = require('../../controller/scores.controller');
 
-scoresRouter.get("/", scoresController.findAllScore);
-scoresRouter.get("/:scoreId", scoresController.findScoreById);
-scoresRouter.delete("/:scoreId", scoresController.deleteScore);
+scoresRouter.post("/post", scoresController.createScore);
+scoresRouter.get("/", scoresController.getScores);
+scoresRouter.get("/:ResultUserId", scoresController.getScoresByResultUserId);
+scoresRouter.put('/:scoreId', scoresController.updatedScoreById);
+scoresRouter.delete("/:scoreId", scoresController.deleteScoreById);
 
 module.exports = scoresRouter;

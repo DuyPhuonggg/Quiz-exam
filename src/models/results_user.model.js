@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
 
-const ResultUser = db.define('Result User', {  
+const ResultsUser = db.define('Results User', {  
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -30,6 +30,6 @@ const ResultUser = db.define('Result User', {
     freezeTableName: true
 });
 
-ResultUser.sync();
+ResultsUser.sync();
 
-module.exports = ResultUser;
+module.exports = ResultsUser;
