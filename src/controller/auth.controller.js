@@ -1,7 +1,3 @@
-const httpStatus = require("http-status");
-const Users = require("../models/user.model");
-const Token = require("../models/token.model");
-const ApiError = require('../utils/ApiError');
 const authServices = require('../services/auth.service');
 const userServices = require('../services/user.service');
 const tokenServices = require('../services/token.service');
@@ -28,10 +24,10 @@ const register = async (req, res) => {
             refresh_Token: refreshToken
         } 
     });
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ 
         statusCode: 500,
-        message: err 
+        message: error 
     });
   }
 };
@@ -51,38 +47,34 @@ const login = async (req,res) => {
         await tokenServices.saveToken(user.id,refreshToken);
         return res.status(200).json({ 
             statusCode: 200,
-            status: "Login successfully", 
+            status: "Log-in successfully", 
             data: { 
                 user : user, 
                 access_token: accessToken, 
                 refresh_token: refreshToken
             } 
         });
-    } catch (err) {
-        return res.status(500).json({ message: err });
+    } catch (error) {
+        return res.status(500).json({ 
+            statusCode: 500,
+            message: error 
+        });
     }
 };
 
 const logout = async (req,res) => {
     try {
-        const refreshToken = await Token.findOne({
-            where: {
-                refreshToken: req.body.refreshToken
-            }
+        const userId = req.body.user_id;
+        await authServices.logout(userId);
+        return res.status(200).json({ 
+            statusCode: 200,
+            status: "Log-out successfully"
         });
-
-        if (!refreshToken) {
-            throw new ApiError(httpStatus.BAD_REQUEST);
-        }
-
-        await Token.destroy({
-            where: {
-                refreshToken: req.body.refreshToken
-            }
-          });
-          return res.status(200).json({ message: "Log-out successfully" });
-    }   catch (error) {
-        return res.status(500).json({ message: error });
+    } catch (error) {
+        return res.status(500).json({ 
+            statusCode: 500,
+            message: error
+        });
     }
 };
 

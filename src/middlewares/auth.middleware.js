@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const Token = require("../models/token.model");
-const tokenServices = require('../services/token.service');
+const TokenServices = require('../services/token.service');
 
 const verifyAccessToken = async (req,res,next) => {
     try {
@@ -34,7 +34,7 @@ const verifyAccessToken = async (req,res,next) => {
    
 }
 
-const verifyRefreshToken = async (req,res,next) => {
+const verifyRefreshToken = async (req,res) => {
     try {
         const refreshToken = await Token.findOne({
             where: {
@@ -49,8 +49,8 @@ const verifyRefreshToken = async (req,res,next) => {
         }
         const payload =  await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         console.log(payload,'2222222222');
-        const accessToken = await tokenServices.generateAccessToken(payload.aud);
-        const newRefreshToken = await tokenServices.generateRefreshToken(payload.aud);
+        const accessToken = await TokenServices.generateAccessToken(payload.aud);
+        const newRefreshToken = await TokenServices.generateRefreshToken(payload.aud);
         await tokenServices.saveToken(payload.aud,refreshToken);
         return res.status(200).json({ 
             statusCode: 200,
@@ -62,6 +62,7 @@ const verifyRefreshToken = async (req,res,next) => {
             } 
         });
     } catch (error) {
+        console.log('1111');
         return res.status(500).json({ 
             statusCode: 500,
             message: error 

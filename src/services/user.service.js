@@ -1,7 +1,6 @@
 const httpStatus = require("http-status");
 const Users = require("../models/user.model");
 const ApiError = require("../utils/ApiError");
-const { Op } = require("sequelize");
 
 const createUser = async (data) => {
   return Users.create({
@@ -38,6 +37,12 @@ const findUserById = async (id) => {
 
 const findUserByUsername = async (username) => {
   const user = await Users.findOne({
+    attributes: [
+      'id',
+      'username',
+      'password',
+      'email'
+    ],
     where: {
       username: username
     }
