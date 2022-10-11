@@ -1,50 +1,47 @@
 const httpStatus = require("http-status");
-const User = require("../models/user.model");
+const Users = require("../models/user.model");
 const ApiError = require("../utils/ApiError");
 const { Op } = require("sequelize");
 
-//Create a user
 const createUser = async (data) => {
-  const {firstName, lastName, username, password, email, address } = data;
-  return User.create({
-    firstName : firstName,
-    lastName: lastName,
-    username: username,
-    password: password,
-    email: email,
-    address: address
+  return Users.create({
+    firstName : data.firstName,
+    lastName: data.lastName,
+    username: data.username,
+    password: data.password,
+    email: data.email,
+    role: data.role
   });
 };
 
-//Get all user
-const findAllUser = async (data) => {
-  const users = await User.findAll({
-    offset: 10,
-    where: {
-      name: "Users",
-      [Op.or]: [
-        { firstName: data.firstName },
-        { email: data.email },
-        { address: data.address }
-      ]
-    }
+const findAllUser = async () => {
+  const users = await Users.findAll({
+    limit: 10,
+    attributes: [
+      'id',
+      'username',
+      'password',
+      'email'
+    ]
   });
   return users;
 };
 
-//Get user by id
+
 const findUserById = async (id) => {
-  return await User.findByPk(id);
+  const user = await Users.findByPk(id);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  return user;
 };
 
-// //update User by id
 const updateUserById = async (userId, body) => {
-  const user = await findUserById(userId);
+  const user = await Users.findByPk(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not dound");
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
-  // const {firstName, lastName, username, password, email, address } = body;
-  await user.update({
+  return await user.update({
     firstName : body.firstName,
     lastName: body.lastName,
     username: body.username,
@@ -56,12 +53,10 @@ const updateUserById = async (userId, body) => {
       id: userId
     }
   });
-  return user;
 };
 
-//delete user by id
 const deleteUserById = async (userId) => {
-  const user = await findUserById(userId);
+  const user = await Users.findByPk(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }

@@ -6,8 +6,7 @@ const {
   authRouter,
   answersRouter,
   questionsRouter,
-  resultsUserRouter,
-  scoresRouter
+  resultsUserRouter
 } = require("./routes/index");
 const app = express();
 require('dotenv').config();
