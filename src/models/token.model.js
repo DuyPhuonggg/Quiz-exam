@@ -12,10 +12,6 @@ const Token = db.define('Token',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    client_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     refreshToken: {
         type: DataTypes.STRING,
         allowNull: true,

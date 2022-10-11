@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
+const {Questions} = require('./index')
 
 const Answers = db.define('Answers', {  
     id: {
@@ -24,6 +25,10 @@ const Answers = db.define('Answers', {
 }, {
     freezeTableName: true
 });
+
+
+Questions.hasMany(Answers, { foreignKey: "question_id" });
+Answers.belongsTo(Questions,{ foreignKey: "question_id", targetKey: "id" });
 
 Answers.sync();
 

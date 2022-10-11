@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
+const { Token, ResultsUser } = require('./index');
 
 const Users = db.define('Users', {  
     id: {
@@ -10,7 +11,7 @@ const Users = db.define('Users', {
     },
     firstName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     lastName: {
         type: DataTypes.STRING,
@@ -32,15 +33,22 @@ const Users = db.define('Users', {
             isEmail: true
         }
     },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    role: {
+        type: DataTypes.ENUM,
+        values: ['user','admin'],
+        allowNull: false
     },
     createdAt:  DataTypes.DATE,
     updatedAt: DataTypes.DATE
 }, {
     freezeTableName: true
 });
+
+Users.hasOne(Token, { foreignKey: "user_id" });
+Token.belongsTo(Users, { foreignKey: "user_id", targetKey: "id" });
+
+Users.hasMany(ResultsUser, { foreignKey: "user_id" });
+ResultsUser.belongsTo(Users, { foreignKey: "user_id", targetKey: 'id' });
 
 Users.sync();
 

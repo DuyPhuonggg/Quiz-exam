@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
+const { ResultsUser, Answers } = require('./index');
 
 const Questions = db.define('Questions', {  
     id: {
@@ -7,10 +8,6 @@ const Questions = db.define('Questions', {
         autoIncrement: true,
         primaryKey:true,
         allowNull: false
-    },
-    result_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
     },
     content: {
         type: DataTypes.STRING,

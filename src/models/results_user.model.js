@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
+const {Questions} = require('./index');
 
-const ResultsUser = db.define('Results User', {  
+const ResultsUser = db.define('Results user', {  
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,16 +13,20 @@ const ResultsUser = db.define('Results User', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    correct_answers: {
+    question_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    no_answers: {
-        type: DataTypes.INTEGER,
+    user_choice: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
-    score_id: {
-        type: DataTypes.INTEGER,
+    answer_correct: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    is_correct: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
     },
     createdAt:  DataTypes.DATE,
@@ -29,6 +34,10 @@ const ResultsUser = db.define('Results User', {
 }, {
     freezeTableName: true
 });
+
+
+Questions.hasMany(ResultsUser, { foreignKey: "question_id" });
+ResultsUser.belongsTo(Questions, { foreignKey: "question_id", targetKey: "id" });
 
 ResultsUser.sync();
 
