@@ -1,6 +1,7 @@
 const express = require("express");
 const userRouter = express.Router();
 const { userController } = require('../../controller/index');
+// const authMiddleware = require('../../middlewares/auth.middleware');
 
 userRouter.post("/add", userController.createUser);
 userRouter.get("/", userController.findAllUser);

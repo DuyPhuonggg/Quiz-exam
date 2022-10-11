@@ -36,7 +36,8 @@ const Users = db.define('Users', {
     role: {
         type: DataTypes.ENUM,
         values: ['user','admin'],
-        allowNull: false
+        allowNull: false,
+        defaultValue: 'user'
     },
     createdAt:  DataTypes.DATE,
     updatedAt: DataTypes.DATE

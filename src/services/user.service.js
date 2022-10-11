@@ -36,6 +36,15 @@ const findUserById = async (id) => {
   return user;
 };
 
+const findUserByUsername = async (username) => {
+  const user = await Users.findOne({
+    where: {
+      username: username
+    }
+  });
+  return user;
+}
+
 const updateUserById = async (userId, body) => {
   const user = await Users.findByPk(userId);
   if (!user) {
@@ -71,6 +80,7 @@ module.exports = {
   createUser,
   findAllUser,
   findUserById,
+  findUserByUsername,
   updateUserById,
   deleteUserById
 };

@@ -18,11 +18,14 @@ const createUser = async (req, res) => {
 
 const findAllUser = async (req, res) => {
   try {
-    const users = await userServices.findAllUser();
+    const users = await userServices.findAllUser({
+      limit:10,
+    });
     return res.status(200).json({ 
       statusCode: 200,
       message: "Successfully", 
-      data: users });
+      data: users 
+    });
   } catch (err) {
     return res.status(500).json({ 
       statusCode: 500,

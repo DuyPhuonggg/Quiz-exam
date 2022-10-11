@@ -12,7 +12,7 @@ const Token = db.define('Token',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    refreshToken: {
+    refresh_token: {
         type: DataTypes.STRING,
         allowNull: true,
     },
