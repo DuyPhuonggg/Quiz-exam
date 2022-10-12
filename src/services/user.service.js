@@ -1,6 +1,7 @@
 const httpStatus = require("http-status");
 const Users = require("../models/user.model");
 const ApiError = require("../utils/ApiError");
+const pagination  = require("../utils/pagination");
 
 const createUser = async (data) => {
   return Users.create({
@@ -13,9 +14,12 @@ const createUser = async (data) => {
   });
 };
 
-const findAllUser = async () => {
+const findAllUser = async (data) => {
+  const { page, size } = data;
+  const { limit, offset } = pagination.getPagination(parseInt(page), parseInt(size));
   const users = await Users.findAll({
-    limit: 10,
+    limit: limit,
+    offset: offset,
     attributes: [
       'id',
       'username',
