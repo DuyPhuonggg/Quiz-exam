@@ -1,96 +1,55 @@
-const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
-const Answers = require('../models/answers.model');
+const answerServices = require("../services/answer.service");
 
 const createAnswer = async (req, res) => {
     try {
-        const answer = await Answers.create({
-            question_id: req.body.question_id,
-            content: req.body.content,
-            is_correct: req.body.is_correct
+        const answer = await answerServices.createAnswer(req.body);
+        return res.status(200).json({ 
+            statusCode: 200,
+            message: "Successfully", 
+            data: answer
         });
-        return res.status(200).json({ message: "Successfully", data: answer });
     } catch (err) {
-        return res.status(500).json({message: err});
-    }
-}
-
-const getAnswers = async (req,res) => {
-    try {
-        const answers = await Answers.findAll({
-            limit: 10 
-          });
-          return res.status(200).json({ message: "Successfully", data: answers});
-    } catch (err) {
-        return res.status(500).json({message: err});
-    }
-}
-
-const getAnswerByQuestionId = async (req,res) => {
-    try {
-        const questionId = req.params.questionId
-        const answers = await Answers.findAll({
-            attributes: [
-                'id',
-                'content',
-                'is_correct'
-            ],
-            where: {
-                question_id: questionId
-            }
+        return res.status(400).json({
+            statusCode:400,
+            message: err
         });
-        if(answers) {
-            res.status(404).json({message: "Not found answers"});
-        }
-        return res.status(200).json({ message: "Successfully", data: { question : questionId, answers } });
-    } catch (err) {
-        return res.status(500).json({message: err});
     }
 }
 
 
 const updatedAnswer = async (req,res) => {
     try {
-        const answer = await Answers.findByPk(req.params.answersId);
-        if (!answer) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Not found");
-        }
-        await Answers.update({
-                question_id : req.body.question_id,
-                content: req.body.content,
-                is_correct: req.body.is_correct
-            }, { 
-                where: {
-                    id: req.params.answersId
-                }
-            });
-        return res.status(200).json({ message: "Successfully", data: answer}); 
+        const answer = await answerServices.updateAnswer(req.params.answerId,req.body);
+        return res.status(200).json({ 
+            statusCode: 200,
+            message: "Update successfully", 
+            data: answer 
+          });
     } catch (err) {
-        return res.status(500).json({message: err});
+        return res.status(500).json({ 
+            statusCode: 500,
+             message: err
+          });
     }
 }
 
 const deleteAnswer = async (req, res) => {
     try {
-        const answer = await Answers.findByPk(req.params.answersId);
-    if (!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Not found");
-    }
-    await answer.destroy({
-        where: {
-            id: req.params.answersId
-        }
-    });
-        return res.status(200).json({message: "Successfully"});
+        const answer = await answerServices.deleteAnswer(req.params.answersId);
+        return res.status(200).json({ 
+            statusCode:200,
+            message: "Delete successfully"
+           });
     } catch (err) {
-        return res.status(500).json({message: err});
+        return res.status(500).json({ 
+            statusCode:500,
+            message: err 
+          });
     }
 }
 
 module.exports = { 
     createAnswer,
-    getAnswers,
-    getAnswerByQuestionId,
     updatedAnswer,
     deleteAnswer
 };
