@@ -31,7 +31,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/questions", questionsRouter);
 app.use("/api/answers", answersRouter);
-app.use("/api/results-user", resultsUserRouter);
+app.use("/api/results", resultsUserRouter);
 
 app.listen(PORT, () => {
   console.log(`App running at http://localhost:${PORT}`);

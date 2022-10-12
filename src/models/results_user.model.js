@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
-const {Questions} = require('./index');
+const { Questions } = require('./index');
 
 const ResultsUser = db.define('Results user', {  
     id: {
@@ -18,16 +18,8 @@ const ResultsUser = db.define('Results user', {
         allowNull: false,
     },
     user_choice: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    answer_correct: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    is_correct: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        allowNull: true,
     },
     createdAt:  DataTypes.DATE,
     updatedAt: DataTypes.DATE
