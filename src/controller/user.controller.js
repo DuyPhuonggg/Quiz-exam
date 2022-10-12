@@ -42,8 +42,8 @@ const findUserById = async (req, res) => {
       message: "Successfully", 
       data: user });
   } catch (err) {
-    return res.status(500).json({ 
-      statusCode: 500,
+    return res.status(404).json({ 
+      statusCode: 404,
       message: err 
     });
   }

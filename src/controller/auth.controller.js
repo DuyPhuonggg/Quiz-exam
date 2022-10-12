@@ -21,7 +21,7 @@ const register = async (req, res) => {
         data: { 
             user : newUser,
             access_token: accessToken,
-            refresh_Token: refreshToken
+            refresh_token: refreshToken
         } 
     });
   } catch (error) {
@@ -64,15 +64,18 @@ const login = async (req,res) => {
 
 const logout = async (req,res) => {
     try {
-        const userId = req.body.user_id;
-        await authServices.logout(userId);
+        const refreshToken = req.body.refresh_token;
+        const refreshTokenDoc = await authServices.logout(refreshToken);
+        if(refreshTokenDoc) {
+
+        }
         return res.status(200).json({ 
             statusCode: 200,
             status: "Log-out successfully"
         });
     } catch (error) {
-        return res.status(500).json({ 
-            statusCode: 500,
+        return res.status(404).json({ 
+            statusCode: 404,
             message: error
         });
     }

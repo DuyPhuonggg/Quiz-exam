@@ -23,20 +23,16 @@ const login = async (username, password) => {
   return user;
 };
 
-const logout = async (userId) => {
-  const tokens = await Token.findAll({
+const logout = async (refreshToken) => {
+  const tokens = await Token.destroy({
     where: {
-      user_id: userId
+      refresh_token: refreshToken
     }
   });
   if (!tokens) {
     throw new ApiError(httpStatus.NOT_FOUND, "Not found");
   }
-  await Token.destroy({
-    where: {
-      user_id: userId
-    }
-  });
+  
 };
 
 module.exports = {
