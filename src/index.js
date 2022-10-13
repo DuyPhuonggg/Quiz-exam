@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const db = require("./configs/database");
 const {
   userRouter,
@@ -9,7 +9,7 @@ const {
   resultsUserRouter
 } = require("./routes/index");
 const app = express();
-require('dotenv').config();
+require("dotenv").config();
 const PORT = process.env.PORT;
 
 // parse application/x-www-form-urlencoded
