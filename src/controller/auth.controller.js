@@ -13,8 +13,16 @@ const register = async (req, res) => {
       message: "Registor successfully",
       data: {
         user: newUser,
-        access_token: accessToken,
-        refresh_token: refreshToken
+        tokens: [
+          {
+            access_token: accessToken,
+            expires: "30 minutes"
+          },
+          {
+            refresh_token: refreshToken,
+            expires: "1 day"
+          }
+        ]
       }
     });
   } catch (error) {
@@ -43,8 +51,16 @@ const login = async (req, res) => {
       status: "Log-in successfully",
       data: {
         user: user,
-        access_token: accessToken,
-        refresh_token: refreshToken
+        tokens: [
+          {
+            access_token: accessToken,
+            expires: "30 minutes"
+          },
+          {
+            refresh_token: refreshToken,
+            expires: "1 day"
+          }
+        ]
       }
     });
   } catch (error) {
