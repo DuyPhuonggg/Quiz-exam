@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
-const {Questions} = require('./index')
+const { Questions } = require('./index');
+const { AnswersTypes } = require('../constant/enum');
 
 const Answers = db.define('Answers', {  
     id: {
@@ -18,7 +19,9 @@ const Answers = db.define('Answers', {
         allowNull: false,
     },
     is_correct: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.ENUM,
+        values: [ AnswersTypes.FALSE, AnswersTypes.TRUE ],
+        allowNull: false,
     },
     createdAt:  DataTypes.DATE,
     updatedAt: DataTypes.DATE

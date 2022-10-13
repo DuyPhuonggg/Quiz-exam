@@ -16,6 +16,10 @@ const Token = db.define('Token',{
         type: DataTypes.STRING,
         allowNull: true,
     },
+    expired_in: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+    },
     createdAt:  DataTypes.DATE,
 }, {
     freezeTableName: true

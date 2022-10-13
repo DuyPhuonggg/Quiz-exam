@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configs/database');
 const { Token, ResultsUser } = require('./index');
+const { role } = require("../constant/enum");
 
 const Users = db.define('Users', {  
     id: {
@@ -35,9 +36,9 @@ const Users = db.define('Users', {
     },
     role: {
         type: DataTypes.ENUM,
-        values: ['user','admin'],
+        values: [role.ADMIN,role.USER],
         allowNull: false,
-        defaultValue: 'user'
+        defaultValue: role.USER
     },
     createdAt:  DataTypes.DATE,
     updatedAt: DataTypes.DATE
