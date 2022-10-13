@@ -1,37 +1,40 @@
-const { DataTypes } = require('sequelize');
-const db = require('../configs/database');
-const { Questions } = require('./index');
-const { AnswersTypes } = require('../constant/enum');
+const { DataTypes } = require("sequelize");
+const db = require("../configs/database");
+const { Questions } = require("./index");
+const { AnswersTypes } = require("../constant/enum");
 
-const Answers = db.define('Answers', {  
+const Answers = db.define(
+  "Answers",
+  {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey:true,
-        allowNull: false
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
     },
     question_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     content: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false
     },
     is_correct: {
-        type: DataTypes.ENUM,
-        values: [ AnswersTypes.FALSE, AnswersTypes.TRUE ],
-        allowNull: false,
+      type: DataTypes.ENUM,
+      values: [AnswersTypes.FALSE, AnswersTypes.TRUE],
+      allowNull: false
     },
-    createdAt:  DataTypes.DATE,
+    createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
-}, {
+  },
+  {
     freezeTableName: true
-});
-
+  }
+);
 
 Questions.hasMany(Answers, { foreignKey: "question_id" });
-Answers.belongsTo(Questions,{ foreignKey: "question_id", targetKey: "id" });
+Answers.belongsTo(Questions, { foreignKey: "question_id", targetKey: "id" });
 
 Answers.sync();
 
