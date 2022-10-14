@@ -1,4 +1,3 @@
-const ApiError = require('../utils/ApiError');
 const questionServices = require("../services/question.service");
 
 const createQuestion = async (req, res) => {
@@ -38,7 +37,7 @@ const getQuestionById = async (req,res) => {
     try {
         const question = await questionServices.getQuestionById(req.params.questionId);
         if(!question) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+            throw new Error("Not found");
         }
         return res.status(200).json({ 
             statusCode: 200,

@@ -1,7 +1,5 @@
 const Questions = require('../models/questions.model');
 const Answers = require("../models/answers.model");
-const ApiError = require('../utils/ApiError');
-const httpStatus = require("http-status");
 const pagination  = require("../utils/pagination");
 
 const createQuestion = async (data) => {
@@ -11,7 +9,7 @@ const createQuestion = async (data) => {
         }
     })
     if(!question) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "Question is already exist!");
+        throw new Error("Question is already exist!");
     }
     const newQuestion = Questions.create({
         content: data
@@ -56,7 +54,7 @@ const getQuestionById = async (id) => {
         }
     });
     if(!question) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "Not found");
+        throw new Error("Not found");
     }
     return question;
 };
@@ -64,7 +62,7 @@ const getQuestionById = async (id) => {
 const updateQuestionById = async(questionId, body) => {
     const question = await Questions.findByPk(questionId);
     if(!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+        throw new Error("Not found");
     }
     return await question.update({
         content: body.content
@@ -78,7 +76,7 @@ const updateQuestionById = async(questionId, body) => {
 const deleteQuestionById = async (questionId) => {
     const question = await Questions.findByPk(questionId);
     if(!question) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+        throw new Error("Not found");
     }
     await question.destroy({
         where: {

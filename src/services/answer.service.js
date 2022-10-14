@@ -1,6 +1,4 @@
 const Answers = require("../models/answers.model");
-const ApiError = require('../utils/ApiError');
-const httpStatus = require("http-status");
 
 const createAnswer = async(data) => {
     const answer = await Answers.create({
@@ -14,7 +12,7 @@ const createAnswer = async(data) => {
 const updateAnswer = async(answerId, body) => {
     const answer = await Answers.findByPk(answerId);
     if(!answer) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+        throw new Error("Not found");
     }
     return await answer.update({
         question_id: body.question_id,
@@ -30,7 +28,7 @@ const updateAnswer = async(answerId, body) => {
 const deleteAnswer = async (answerId) => {
     const answer = await Answers.findByPk(answerId);
     if(!answer) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+        throw new Error("Not found");
     }
     await answer.destroy({
         where: {
