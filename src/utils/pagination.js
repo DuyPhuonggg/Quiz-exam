@@ -4,18 +4,18 @@ const getPagination = (page, size) => {
     return { limit, offset};
 };
 
-// const getPaginationData = (data, page, size) => {
-//     const {
-//         count: total_items,
-//         rows: current_items
-//     } = data;
-//     const current_page = page ? page : 0;
-//     const total_pages = Math.ceil(total_items/size);
+const getPaginationData = (data, page, size) => {
+    const {
+        count: total_items,
+        rows: results
+    } = data;
+    const current_page = page ? page : 1;
+    const total_pages = Math.ceil(total_items/size);
 
-//     return { total_items, total_pages, current_items, current_page};
-// }
+    return { total_items, results, current_page, total_pages};
+}
 
 module.exports = {
     getPagination,
-    // getPaginationData
+    getPaginationData
 }
