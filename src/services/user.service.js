@@ -35,7 +35,7 @@ const findUserById = async (id) => {
 
 const doesExistAccount = async (username, password) => {
   const user = await Users.findOne({
-    attributes: ["id", "username", "password", "email"],
+    attributes: ["id", "username", "password", "email", "role"],
     where: { username: username }
   });
   if (!user) throw new Error("Username Incorrect!");

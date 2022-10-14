@@ -33,8 +33,33 @@ const saveToken = async (user, refreshToken) => {
   return token;
 };
 
+const updateToken = async (user, refreshToken) => {
+  const token = await Token.findOne({
+    where: { refresh_token : refreshToken }
+  });
+  if (!token) throw new Error("Not Found Token");
+  const newRefreshToken = generateRefreshToken(user);
+  return await token.update({
+    user_id: user.id,
+    refresh_token: newRefreshToken,
+    expired_in: 1
+  });
+};
+
+const deleteToken = async (refreshToken) => {
+  const token = await Token.findOne({
+    where: { refresh_token : refreshToken }
+  })
+  if (!token) {
+    throw new Error("Not Found");
+  }
+  await token.destroy();
+};
+
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
-  saveToken
+  saveToken,
+  updateToken,
+  deleteToken
 };

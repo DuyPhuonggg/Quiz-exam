@@ -25,7 +25,8 @@ authRouter.delete(
 );
 
 authRouter.post(
-  "/refresh-token",
+  "/refresh-token/:id",
+  authMiddleware.verifyAccessToken,
   validates(authValidation.refreshToken),
   authController.refreshToken
 );

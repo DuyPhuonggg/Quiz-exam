@@ -33,6 +33,8 @@ const logout = Joi.object()
 const refreshToken = Joi.object()
   .keys({
     body: Joi.object().keys({
+      username: Joi.string().alphanum().min(3).max(50).required(),
+      password: Joi.string().min(1).required(),
       refresh_token: Joi.string().required()
     })
   })

@@ -1,10 +1,8 @@
 const authServices = require("../services/auth.service");
-const userServices = require("../services/user.service");
-const tokenServices = require("../services/token.service");
 
 const register = async (req, res) => {
   try {
-    const data = await authServices.registor(req.body);
+    const data = await authServices.register(req.body);
     return res.status(200).json({
       statusCode: 200,
       message: "Registor successfully",
@@ -59,7 +57,26 @@ const logout = async (req, res) => {
   }
 };
 
-const refreshToken = async (req, res) => {};
+const refreshToken = async (req, res) => {
+  try {
+    const { username, password, refresh_token } = req.body;
+    const data = await authServices.refreshToken(username, password, refresh_token);
+    return res.status(200).json({
+      statusCode: 200,
+      status: "Refresh Token Successfully",
+      data: data.user,
+      tokens: [
+        { access_token: data.newAccessToken, expires: "30 minutes" },
+        { refresh_token: data.newRefreshToken.refresh_token, expires: "1 day" }
+      ]
+    });
+  } catch (error) {
+    return res.status(404).json({
+      statusCode: 404,
+      message: "Not Found"
+    });
+  }
+};
 
 module.exports = {
   register,
