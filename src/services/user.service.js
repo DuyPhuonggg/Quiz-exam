@@ -33,34 +33,28 @@ const findUserById = async (id) => {
   return user;
 };
 
-const findUserByUsername = async (username) => {
+const doesExistAccount = async (username, password) => {
   const user = await Users.findOne({
     attributes: ["id", "username", "password", "email"],
-    where: {
-      username: username
-    }
+    where: { username: username }
   });
+  if (!user) throw new Error("Username Incorrect!");
+  const isPassword = await bcrypt.compare(password, user.password);
+  if (!isPassword) throw new Error("Password incorrect!");
   return user;
 };
 
 const updateUserById = async (userId, body) => {
   const user = await Users.findByPk(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new Error("User Not Found");
   }
   return await user.update(
     {
-      firstName: body.firstName,
-      lastName: body.lastName,
-      username: body.username,
-      password: body.password,
-      email: body.email,
-      address: body.address
+      ...body
     },
     {
-      where: {
-        id: userId
-      }
+      where: { id: userId }
     }
   );
 };
@@ -68,12 +62,10 @@ const updateUserById = async (userId, body) => {
 const deleteUserById = async (userId) => {
   const user = await Users.findByPk(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new Error("User Not Found");
   }
   await user.destroy({
-    where: {
-      id: userId
-    }
+    where: { id: userId }
   });
 };
 
@@ -81,7 +73,7 @@ module.exports = {
   createUser,
   findAllUser,
   findUserById,
-  findUserByUsername,
+  doesExistAccount,
   updateUserById,
   deleteUserById
 };

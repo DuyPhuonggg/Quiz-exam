@@ -5,33 +5,25 @@ const TokenServices = require('../services/token.service');
 
 const verifyAccessToken = async (req,res,next) => {
     try {
-        const token = req.headers.token;
+        const token = req.headers.authorization;
+        const userId = req.params.id;
+        const role = req.query.role;
         if(token) {
             const accessToken = token.split(' ')[1];
             jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, payload) => {
-                if(error) {
-                    return next(console.log('Unauthorized'));
-                }
+                if(error) throw new Error("Unauthorization!");
                 req.payload = payload;
-                console.log(payload,'11111');
-                next()
+                console.log(payload.role,'2222');
+                if( payload.aud != userId || payload.role != role ) throw new Error("Unauthorization!");
+                next();
             });
-            return accessToken;
         }
-        console.log(accessToken,'1111111111111111');
-        console.log(this.accessToken,'2222222222222222222');
-        return res.status(200).json({
-            statusCode: 200,
-            message: "Verfiy token successfully",
-            data: this.accessToken
-        })
     } catch (error) {
-        return res.status(500).json({ 
-            statusCode: 500,
-            message: error 
+        return res.status(406).json({ 
+            statusCode: 406,
+            message: 'Not Acceptable' 
         });
     }
-   
 }
 
 const verifyRefreshToken = async (req,res) => {
@@ -47,11 +39,11 @@ const verifyRefreshToken = async (req,res) => {
                 message: "Not found"
             });
         }
-        const payload =  await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const payload =  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         console.log(payload,'2222222222');
-        const accessToken = await TokenServices.generateAccessToken(payload.aud);
-        const newRefreshToken = await TokenServices.generateRefreshToken(payload.aud);
-        await tokenServices.saveToken(payload.aud,refreshToken);
+        const accessToken =  TokenServices.generateAccessToken(payload.aud);
+        const newRefreshToken =  TokenServices.generateRefreshToken(payload.aud);
+        await TokenServices.saveToken(payload.aud,refreshToken);
         return res.status(200).json({ 
             statusCode: 200,
             status: "Refresh-token successfully", 

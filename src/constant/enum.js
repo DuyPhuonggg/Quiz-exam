@@ -1,14 +1,14 @@
 const role = {
-    USER: "User",
-    ADMIN: "Admin"
-}
+  USER: "user",
+  ADMIN: "admin"
+};
 
 const AnswersTypes = {
-    TRUE : 'True',
-    FALSE: 'False'
-}
+  TRUE: "true",
+  FALSE: "false"
+};
 
 module.exports = {
-    role,
-    AnswersTypes
-}
+  role,
+  AnswersTypes
+};

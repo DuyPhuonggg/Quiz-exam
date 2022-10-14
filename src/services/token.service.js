@@ -2,10 +2,10 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const Token = require("../models/token.model");
 
-const generateAccessToken = (userId) => {
+const generateAccessToken = (user) => {
   const payload = {
-    aud: userId,
-    role: "user",
+    aud: user.id,
+    role: user.role,
     expiresIn: "1h"
   };
   const secret = process.env.ACCESS_TOKEN_SECRET;
@@ -13,10 +13,10 @@ const generateAccessToken = (userId) => {
   return JWT;
 };
 
-const generateRefreshToken = (userId) => {
+const generateRefreshToken = (user) => {
   const payload = {
-    aud: userId,
-    role: "user",
+    aud: user.id,
+    role: user.role,
     expiresIn: "1d"
   };
   const secret = process.env.ACCESS_TOKEN_SECRET;
@@ -24,9 +24,9 @@ const generateRefreshToken = (userId) => {
   return JWT;
 };
 
-const saveToken = async (userId, refreshToken) => {
+const saveToken = async (user, refreshToken) => {
   const token = await Token.create({
-    user_id: userId,
+    user_id: user.id,
     refresh_token: refreshToken,
     expired_in: 1
   });

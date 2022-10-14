@@ -1,4 +1,3 @@
-
 const validate = (schema) => (req,res,next) => {
     const { value, error } = schema.validate(req);
     if (error) {
