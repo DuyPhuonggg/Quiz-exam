@@ -1,12 +1,14 @@
 const Users = require("../models/user.model");
 const pagination = require("../utils/pagination");
 const bcrypt = require("bcrypt");
+const { Op } =require("sequelize");
 
 const createUser = async (data) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(data.password, salt);
   data.password = hash;
-  return Users.create({ ...data });
+  const  user  = Users.create({ ...data });
+  return user ;
 };
 
 const findAllUser = async (options) => {
@@ -18,7 +20,7 @@ const findAllUser = async (options) => {
   const users = await Users.findAndCountAll({
     limit: limit,
     offset: offset,
-    attributes: ["id", "username", "password", "email"]
+    attributes: ["id", "firstName", "lastName","username", "email"]
   });
   const data = pagination.getPaginationData(users, page, size);
   return data;

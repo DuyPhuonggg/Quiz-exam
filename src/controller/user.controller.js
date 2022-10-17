@@ -1,83 +1,46 @@
 const userServices = require("../services/user.service");
+const catchAsync = require("../utils/catchAsync");
+const httpStatus = require("http-status");
 
-const createUser = async (req, res) => {
-  try {
-    const user = await userServices.createUser(req.body);
-    return res.status(200).json({
-      statusCode: 200,
-      message: "Create successfully",
-      data: user
-    });
-  } catch (err) {
-    return res.status(500).json({
-      statusCode: 500,
-      message: err
-    });
-  }
-};
+const createUser = catchAsync(async (req, res) => {
+  const user = await userServices.createUser(req.body);
+  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  return res.status(httpStatus.CREATED).json({
+    message: "Create successfully",
+    data: { id, firtsName, lastName, username, email, role }
+  });
+});
 
-const findAllUser = async (req, res) => {
-  try {
-    const data = await userServices.findAllUser(req.query);
-    return res.status(200).json({
-      statusCode: 200,
-      message: "Successfully",
-      data: data
-    });
-  } catch (err) {
-    return res.status(500).json({
-      statusCode: 500,
-      message: err
-    });
-  }
-};
+const findAllUser = catchAsync(async (req, res) => {
+  const data = await userServices.findAllUser(req.query);
+  return res.status(httpStatus.OK).json({
+    message: "Successfully",
+    data: data
+  });
+});
 
-const findUserById = async (req, res) => {
-  try {
-    const user = await userServices.findUserById(req.params.userId);
-    return res.status(200).json({
-      statusCode: 200,
-      message: "Successfully",
-      data: user
-    });
-  } catch (err) {
-    return res.status(404).json({
-      statusCode: 404,
-      message: err
-    });
-  }
-};
+const findUserById = catchAsync(async (req, res) => {
+  const user = await userServices.findUserById(req.params.userId);
+  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  return res.status(httpStatus.OK).json({
+    message: "Successfully",
+    data: { id, firtsName, lastName, username, email, role }
+  });
+});
 
-const updatedUser = async (req, res) => {
-  try {
-    const user = await userServices.updateUserById(req.params.userId, req.body);
-    return res.status(200).json({
-      statusCode: 200,
-      message: "Update successfully",
-      data: user
-    });
-  } catch (err) {
-    return res.status(500).json({
-      statusCode: 500,
-      message: err
-    });
-  }
-};
+const updatedUser = catchAsync(async (req, res) => {
+  const user = await userServices.updateUserById(req.params.userId, req.body);
+  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  return res.status(httpStatus.OK).json({
+    message: "Update successfully",
+    data: { id, firtsName, lastName, username, email, role }
+  });
+});
 
-const deleteUser = async (req, res) => {
-  try {
-    await userServices.deleteUserById(req.params.userId);
-    return res.status(200).json({
-      statusCode: 200,
-      message: "Delete successfully"
-    });
-  } catch (err) {
-    return res.status(500).json({
-      statusCode: 500,
-      message: err
-    });
-  }
-};
+const deleteUser = catchAsync(async (req, res) => {
+  await userServices.deleteUserById(req.params.userId);
+  return res.status(httpStatus.OK).json({ message: "Delete successfully" });
+});
 
 module.exports = {
   createUser,
