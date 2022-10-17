@@ -6,7 +6,7 @@ const register = Joi.object()
     body: Joi.object().keys({
       firstName: Joi.string().min(1).max(20),
       lastName: Joi.string().min(1).max(20),
-      username: Joi.string().min(3).max(50).required(),
+      username: Joi.string().alphanum().min(3).max(50).required(),
       password: Joi.string().min(1).required(),
       email: Joi.string().lowercase().email().min(5).max(50).required(),
       role: Joi.string().valid(role.ADMIN, role.USER)
@@ -25,24 +25,16 @@ const login = Joi.object()
 
 const logout = Joi.object()
   .keys({
-    query: Joi.object().keys({
-      role: Joi.string().valid(role.ADMIN, role.USER)
-    }),
-    body: Joi.object().keys({
-      refresh_token: Joi.string().required()
+    params: Joi.object().keys({
+      id: Joi.number().integer().min(1).required()
     })
   })
   .unknown(true);
 
 const refreshToken = Joi.object()
   .keys({
-    query: Joi.object().keys({
-      role: Joi.string().valid(role.ADMIN, role.USER)
-    }),
-    body: Joi.object().keys({
-      username: Joi.string().alphanum().min(3).max(50).required(),
-      password: Joi.string().min(1).required(),
-      refresh_token: Joi.string().required()
+    params: Joi.object().keys({
+      id: Joi.number().integer().min(1).required()
     })
   })
   .unknown(true);

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const Token = require("../models/token.model");
+const userServices = require("../services/user.service");
 
 const generateAccessToken = (user) => {
   const payload = {
@@ -24,36 +25,54 @@ const generateRefreshToken = (user) => {
   return JWT;
 };
 
-const saveToken = async (user, refreshToken) => {
-  const token = await Token.create({
-    user_id: user.id,
-    refresh_token: refreshToken,
-    expired_in: 1
+const saveToken = async (user, refreshToken, clientId) => {
+  const oldToken = await Token.findOne({
+    where: {
+      user_id: user.id,
+      client_id: clientId
+    }
   });
-  return token;
+  if (!oldToken) {
+    const token = await Token.create({
+      user_id: user.id,
+      client_id: clientId,
+      refresh_token: refreshToken,
+      expired_in: 1
+    });
+    return token;
+  } else {
+    throw new Error("Already login");
+  }
 };
 
-const updateToken = async (user, refreshToken) => {
+const updateToken = async (userId, clientId) => {
   const token = await Token.findOne({
-    where: { refresh_token : refreshToken }
+    where: {
+      user_id: userId,
+      client_id: clientId
+    }
   });
   if (!token) throw new Error("Not Found Token");
+  const user = await userServices.findUserById(userId);
+  if (!user) throw new Error("Not Found User");
   const newRefreshToken = generateRefreshToken(user);
   return await token.update({
-    user_id: user.id,
+    user_id: userId,
+    client_id: clientId,
     refresh_token: newRefreshToken,
     expired_in: 1
   });
 };
 
-const deleteToken = async (refreshToken) => {
+const deleteToken = async (userId, clientId) => {
   const token = await Token.findOne({
-    where: { refresh_token : refreshToken }
-  })
-  if (!token) {
-    throw new Error("Not Found");
-  }
-  await token.destroy();
+    where: {
+      user_id: userId,
+      client_id: clientId
+    }
+  });
+  if (token) await token.destroy();
+  else throw new Error("Not Found Token");
 };
 
 module.exports = {

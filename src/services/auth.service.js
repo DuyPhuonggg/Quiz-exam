@@ -1,35 +1,37 @@
 const userServices = require("../services/user.service");
 const tokenServices = require("../services/token.service");
 
-const register = async (data) => {
+const register = async (data, clientId) => {
   const user = await userServices.createUser(data);
   if (!user) {
     throw new Error("Cannot create user");
   }
   const accessToken = tokenServices.generateAccessToken(user);
   const refreshToken = tokenServices.generateRefreshToken(user);
-  await tokenServices.saveToken(user, refreshToken);
+  await tokenServices.saveToken(user, refreshToken, clientId);
   return { user, accessToken, refreshToken };
 };
 
-const login = async (username, password) => {
-  const user = await userServices.doesExistAccount(username,password); 
+const login = async (username, password, clientId) => {
+  const user = await userServices.doesExistAccount(username, password);
   const accessToken = tokenServices.generateAccessToken(user);
   const refreshToken = tokenServices.generateRefreshToken(user);
-  await tokenServices.saveToken(user, refreshToken);
-  return { user, accessToken, refreshToken };
+  await tokenServices.saveToken(user, refreshToken, clientId);
+  return { accessToken, refreshToken };
 };
 
-const logout = async (refreshToken) => {
-  await tokenServices.deleteToken(refreshToken);
+const logout = async (userId, clientId) => {
+  await tokenServices.deleteToken(userId, clientId);
 };
 
-const refreshToken = async (username, password, refreshToken) => {
-  const user = await userServices.doesExistAccount(username,password)
-  const newAccessToken = tokenServices.generateAccessToken(user);
-  const newRefreshToken = await tokenServices.updateToken(user,refreshToken);
-  return { user, newAccessToken, newRefreshToken };
-}
+const refreshToken = async (userId, clientId) => {
+  const user = await userServices.findUserById(userId);
+  if (user) {
+    const newAccessToken = tokenServices.generateAccessToken(user);
+    const newRefreshToken = await tokenServices.updateToken(userId, clientId);
+    return { newAccessToken, newRefreshToken };
+  } else throw new Error("Not found User");
+};
 
 module.exports = {
   register,

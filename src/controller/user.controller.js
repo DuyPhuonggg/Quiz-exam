@@ -4,10 +4,10 @@ const httpStatus = require("http-status");
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userServices.createUser(req.body);
-  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  const { id, firstName, lastName, username, email, role } = user.toJSON();
   return res.status(httpStatus.CREATED).json({
     message: "Create successfully",
-    data: { id, firtsName, lastName, username, email, role }
+    data: { id, firstName, lastName, username, email, role }
   });
 });
 
@@ -21,19 +21,19 @@ const findAllUser = catchAsync(async (req, res) => {
 
 const findUserById = catchAsync(async (req, res) => {
   const user = await userServices.findUserById(req.params.userId);
-  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  const { id, firstName, lastName, username, email, role } = user.toJSON();
   return res.status(httpStatus.OK).json({
     message: "Successfully",
-    data: { id, firtsName, lastName, username, email, role }
+    data: { id, firstName, lastName, username, email, role }
   });
 });
 
 const updatedUser = catchAsync(async (req, res) => {
   const user = await userServices.updateUserById(req.params.userId, req.body);
-  const { id, firtsName, lastName, username, email, role } = user.toJSON();
+  const { id, firstName, lastName, username, email, role } = user.toJSON();
   return res.status(httpStatus.OK).json({
     message: "Update successfully",
-    data: { id, firtsName, lastName, username, email, role }
+    data: { id, firstName, lastName, username, email, role }
   });
 });
 
