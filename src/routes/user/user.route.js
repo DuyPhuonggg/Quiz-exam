@@ -7,31 +7,31 @@ const authMiddleware = require("../../middlewares/auth.middleware");
 
 userRouter.post(
   "/add",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(userValidation.createUser),
   userController.createUser
 );
 userRouter.get(
   "/",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(userValidation.getUsers),
   userController.findAllUser
 );
 userRouter.get(
   "/:userId",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(userValidation.getUser),
   userController.findUserById
 );
 userRouter.put(
   "/:userId",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(userValidation.updateUser),
   userController.updatedUser
 );
 userRouter.delete(
   "/:userId",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(userValidation.deleteUser),
   userController.deleteUser
 );

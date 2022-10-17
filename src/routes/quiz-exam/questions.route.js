@@ -7,7 +7,7 @@ const authMiddleware = require("../../middlewares/auth.middleware");
 
 questionsRouter.post(
   "/add",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(questionValidation.createQuestion),
   questionsController.createQuestion
 );
@@ -25,13 +25,13 @@ questionsRouter.get(
 );
 questionsRouter.put(
   "/:questionId",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(questionValidation.updateQuestion),
   questionsController.updatedQuestion
 );
 questionsRouter.delete(
   "/:questionId",
-  authMiddleware.verifyRole,
+  authMiddleware.verifyAdmin,
   validates(questionValidation.deleteQuestion),
   questionsController.deleteQuestion
 );

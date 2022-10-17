@@ -50,6 +50,9 @@ const updateUserById = async (userId, body) => {
   if (!user) {
     throw new Error("User Not Found");
   }
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(body.password, salt);
+  body.password = hash;
   return await user.update(
     {
       ...body
