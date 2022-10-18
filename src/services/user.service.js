@@ -28,9 +28,7 @@ const findAllUser = async (options) => {
 
 const findUserById = async (id) => {
   const user = await Users.findByPk(id);
-  if (!user) {
-    throw new Error("User not found");
-  }
+  if (!user) throw new Error("User not found");
   return user;
 };
 
@@ -47,27 +45,19 @@ const doesExistAccount = async (username, password) => {
 
 const updateUserById = async (userId, body) => {
   const user = await Users.findByPk(userId);
-  if (!user) {
-    throw new Error("User Not Found");
-  }
+  if (!user) throw new Error("User Not Found");
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(body.password, salt);
   body.password = hash;
   return await user.update(
-    {
-      ...body
-    },
-    {
-      where: { id: userId }
-    }
+    { ...body },
+    { where: { id: userId } }
   );
 };
 
 const deleteUserById = async (userId) => {
   const user = await Users.findByPk(userId);
-  if (!user) {
-    throw new Error("User Not Found");
-  }
+  if (!user) throw new Error("User Not Found");
   await user.destroy({
     where: { id: userId }
   });

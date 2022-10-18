@@ -40,9 +40,7 @@ const saveToken = async (user, refreshToken, clientId) => {
       expired_in: 1
     });
     return token;
-  } else {
-    throw new Error("Already login");
-  }
+  } else  throw new Error("Already login");
 };
 
 const updateToken = async (userId, clientId) => {

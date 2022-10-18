@@ -3,9 +3,7 @@ const tokenServices = require("../services/token.service");
 
 const register = async (data, clientId) => {
   const user = await userServices.createUser(data);
-  if (!user) {
-    throw new Error("Cannot create user");
-  }
+  if (!user) throw new Error("Cannot create user");
   const accessToken = tokenServices.generateAccessToken(user);
   const refreshToken = tokenServices.generateRefreshToken(user);
   await tokenServices.saveToken(user, refreshToken, clientId);
