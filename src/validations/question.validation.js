@@ -1,43 +1,53 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
-const createQuestion = Joi.object({
+const createQuestion = Joi.object()
+  .keys({
     body: Joi.object().keys({
-        content: Joi.string().min(1).required(),
+      content: Joi.string().min(1).required()
     })
-}).unknown(true); 
+  })
+  .unknown(true);
 
-const getListQuestion = Joi.object({
+const getListQuestion = Joi.object()
+  .keys({
     query: Joi.object({
-        size: Joi.number().integer(),
-        page: Joi.number().integer()
+      size: Joi.number().integer(),
+      page: Joi.number().integer()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
-const getQuestion = Joi.object({
+const getQuestion = Joi.object()
+  .keys({
     params: Joi.object().keys({
-        questionId: Joi.number().integer().required()
+      questionId: Joi.number().integer().required()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
-const updateQuestion = Joi.object({
+const updateQuestion = Joi.object()
+  .keys({
     params: Joi.object({
-        questionId: Joi.number().min(1).required()
+      questionId: Joi.number().min(1).required()
     }),
     body: Joi.object().keys({
-        content: Joi.string().min(1).required(),
+      content: Joi.string().min(1).required()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
-const deleteQuestion = Joi.object({
+const deleteQuestion = Joi.object()
+  .keys({
     params: Joi.object({
-        questionId: Joi.number().integer().required()
+      questionId: Joi.number().integer().required()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
 module.exports = {
-    createQuestion,
-    getListQuestion,
-    getQuestion,
-    updateQuestion,
-    deleteQuestion
-}
+  createQuestion,
+  getListQuestion,
+  getQuestion,
+  updateQuestion,
+  deleteQuestion
+};

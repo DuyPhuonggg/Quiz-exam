@@ -1,32 +1,38 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
-const createAnswer = Joi.object({
+const createAnswer = Joi.object()
+  .keys({
     body: Joi.object().keys({
-        question_id: Joi.number().integer().required(),
-        content: Joi.string().min(1).required(),
-        is_correct: Joi.string().required()
+      question_id: Joi.number().integer().required(),
+      content: Joi.string().min(1).required(),
+      is_correct: Joi.string().required()
     })
-}).unknown(true); 
+  })
+  .unknown(true);
 
-const updateAnswer = Joi.object({
+const updateAnswer = Joi.object()
+  .keys({
     params: Joi.object({
-        answerId: Joi.number().min(1).required()
+      answerId: Joi.number().min(1).required()
     }),
     body: Joi.object().keys({
-        question_id: Joi.number().integer().required(),
-        content: Joi.string().min(1).required(),
-        is_correct: Joi.string().required()
+      question_id: Joi.number().integer().required(),
+      content: Joi.string().min(1).required(),
+      is_correct: Joi.string().required()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
-const deleteAnswer = Joi.object({
+const deleteAnswer = Joi.object()
+  .keys({
     params: Joi.object({
-        answerId: Joi.number().integer().required()
+      answerId: Joi.number().integer().required()
     })
-}).unknown(true);
+  })
+  .unknown(true);
 
 module.exports = {
-    createAnswer,
-    updateAnswer,
-    deleteAnswer
-}
+  createAnswer,
+  updateAnswer,
+  deleteAnswer
+};
