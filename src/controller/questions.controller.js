@@ -15,18 +15,13 @@ const getListQuestion = catchAsync(async (req, res) => {
   const questions = await questionServices.getListQuestion(req.query);
   return res.status(httpStatus.OK).json({
     message: "Successfully",
-    data: {
-        ...questions
-    }
+    data: { ...questions }
   });
 });
 
 const getQuestionById = catchAsync(async (req, res) => {
   const questionId = req.params.questionId;
   const question = await questionServices.getQuestionById(questionId);
-  if (!question) {
-    throw new Error("Not found");
-  }
   return res.status(httpStatus.OK).json({
     message: "Successfully",
     data: question
