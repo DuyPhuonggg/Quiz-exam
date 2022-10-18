@@ -13,13 +13,13 @@ userRouter.post(
 );
 userRouter.get(
   "/",
-  authMiddleware.verifyAdmin,
+  authMiddleware.verifyAccessToken,
   validates(userValidation.getUsers),
   userController.findAllUser
 );
 userRouter.get(
   "/:userId",
-  authMiddleware.verifyAdmin,
+  authMiddleware.verifyAccessToken,
   validates(userValidation.getUser),
   userController.findUserById
 );

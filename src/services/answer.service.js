@@ -11,29 +11,21 @@ const createAnswer = async(data) => {
 
 const updateAnswer = async(answerId, body) => {
     const answer = await Answers.findByPk(answerId);
-    if(!answer) {
-        throw new Error("Not found");
-    }
+    if(!answer) throw new Error("Not found Answer ");
     return await answer.update({
         question_id: body.question_id,
         content: body.content,
         is_correct: body.is_correct
     }, {
-        where: {
-            id: answerId
-        }
+        where: { id: answerId }
     });
 };
 
 const deleteAnswer = async (answerId) => {
     const answer = await Answers.findByPk(answerId);
-    if(!answer) {
-        throw new Error("Not found");
-    }
+    if(!answer) throw new Error("Not found answers");
     await answer.destroy({
-        where: {
-            id:answerId
-        }
+        where: { id: answerId }
     });
 };
 

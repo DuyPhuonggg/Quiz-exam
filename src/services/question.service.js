@@ -17,10 +17,10 @@ const createQuestion = async (data) => {
     return newQuestion;
 };
 
-const getListQuestion = async (data) => {
-    const { page, size } = data;
+const getListQuestion = async (options) => {
+    const { page, size } = options;
     const { limit, offset } = pagination.getPagination(parseInt(page), parseInt(size));
-    const questions = await Questions.findAll({
+    const questions = await Questions.findAndCountAll({
         attributes: [
             'id',
             'content'
@@ -35,8 +35,8 @@ const getListQuestion = async (data) => {
             ]
         }
     });
-    console.log(questions,'111111');
-    return questions;
+    const data = pagination.getPaginationData(questions, page, size);
+    return data;
 };
 
 const getQuestionById = async (id) => {

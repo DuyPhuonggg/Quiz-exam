@@ -2,21 +2,22 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { role } = require("../constant/enum");
 const httpStatus = require("http-status");
+const userServices = require("../services/user.service");
 
 const verifyAccessToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const userId = req.params.id;
     if (token) {
       const accessToken = token.split(" ")[1];
       jwt.verify( accessToken, process.env.ACCESS_TOKEN_SECRET, (error, payload) => {
           if (error) throw new Error("Unauthorization!");
           req.payload = payload;
-          if (payload.aud !== parseInt(userId)) throw new Error("Unathorization!");
-          next();
         }
       );
     } else throw new Error("Not Found Token");
+    const user = await userServices.findUserById(req.payload.aud);
+    if (!user) throw new Error("Not Found User");
+    next();
   } catch (error) {
     return res.status(httpStatus.NOT_ACCEPTABLE).json({
       statusCode: 406,

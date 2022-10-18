@@ -11,12 +11,14 @@ answersRouter.post(
   validates(answerValidation.createAnswer),
   AnswersController.createAnswer
 );
+
 answersRouter.put(
   "/:answerId",
   authMiddleware.verifyAdmin,
-  validates(answerValidation.deleteAnswer),
+  validates(answerValidation.updateAnswer),
   AnswersController.updatedAnswer
 );
+
 answersRouter.delete(
   "/:answerId",
   authMiddleware.verifyAdmin,
