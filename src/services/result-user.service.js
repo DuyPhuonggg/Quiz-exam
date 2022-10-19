@@ -4,18 +4,20 @@ const ResultsUser = require("../models/results_user.model");
 const Answers = require("../models/answers.model");
 
 const createResult = async (data) => {
-  const { user_id, session, result } = data;
+  const { user_id, session, content } = data;
+  const check1 = [];
   const user = await userServices.findUserById(user_id);
   if (!user) throw new Error("Not Found User");
-  const DoesExistSession = await ResultsUser.findAll({
+  const results = await ResultsUser.findAll({
     where: { session: session }
   });
-  let count = DoesExistSession.dataValues;
-  console.log(count);
-  if (!count) throw new Error("Already Submit!");
+  const sessions = results.map(v=>v.session === session);
+  console.log(sessions,'11');
+  if (sessions !== check1) throw new Error("Already Submit");
   let countQuestion = 0;
   let countCorrectAnswer = 0;
-  const submit = await Promise.all( result.map(async (v1) => {
+  let score = 0;
+  const submit = await Promise.all(content.map(async (v1) => {
       return new Promise(async (resolve, reject) => {
         countQuestion++;
         const questionId = await questionServices.getQuestionByContent(v1.question);
@@ -25,23 +27,24 @@ const createResult = async (data) => {
             is_correct: true
           }
         });
-        const correctChoices = correctAnswer.map((v2) => v2.answer);
-        let check = correctChoices.length == v1.answer.length && v1.answer.every((value, index) => value === correctChoices[index]);
-        if (check) countCorrectAnswer++;
-        const score = Math.round(100*countCorrectAnswer / countQuestion);
+        const correctAnswerId = correctAnswer.map((v2) => v2.id).sort();
+        let check = 
+          correctAnswerId.length == v1.answer.length &&
+          v1.answer.sort().every((value, index) => value === correctAnswerId[index]);
+        if (check === true) countCorrectAnswer++;
+        score = Math.round((100 * countCorrectAnswer) / countQuestion);
         const newData = await ResultsUser.create({
           session: session,
           user_id: user_id,
           question_id: questionId,
           user_choice: v1.answer
         });
-        // console.log(score,'33333')
-        return resolve(newData), score;
+        return resolve(newData);
       });
     })
   );
-  
-  return  submit;
+
+  return { submit, score };
 };
 
 module.exports = {
