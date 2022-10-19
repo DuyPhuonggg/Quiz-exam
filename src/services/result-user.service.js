@@ -5,15 +5,13 @@ const Answers = require("../models/answers.model");
 
 const createResult = async (data) => {
   const { user_id, session, content } = data;
-  const check1 = [];
   const user = await userServices.findUserById(user_id);
   if (!user) throw new Error("Not Found User");
   const results = await ResultsUser.findAll({
     where: { session: session }
   });
-  const sessions = results.map(v=>v.session === session);
-  console.log(sessions,'11');
-  if (sessions !== check1) throw new Error("Already Submit");
+  const sessions = results.map(v => v.session);
+  if (sessions.includes(session) === true ) throw new Error("Already Submit, Update New Session");
   let countQuestion = 0;
   let countCorrectAnswer = 0;
   let score = 0;
@@ -43,7 +41,6 @@ const createResult = async (data) => {
       });
     })
   );
-
   return { submit, score };
 };
 
