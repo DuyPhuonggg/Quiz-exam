@@ -10,8 +10,9 @@ const createResult = async (data) => {
   const results = await ResultsUser.findAll({
     where: { session: session }
   });
-  const sessions = results.map(v => v.session);
-  if (sessions.includes(session) === true ) throw new Error("Already Submit, Update New Session");
+  const sessions = results.map((v) => v.session);
+  if (sessions.includes(session) === true)
+    throw new Error("Already Submit, Update New Session");
   let countQuestion = 0;
   let countCorrectAnswer = 0;
   let score = 0;
@@ -26,7 +27,7 @@ const createResult = async (data) => {
           }
         });
         const correctAnswerId = correctAnswer.map((v2) => v2.id).sort();
-        let check = 
+        let check =
           correctAnswerId.length == v1.answer.length &&
           v1.answer.sort().every((value, index) => value === correctAnswerId[index]);
         if (check === true) countCorrectAnswer++;
@@ -44,6 +45,22 @@ const createResult = async (data) => {
   return { submit, score };
 };
 
+const queryResult = async (sessionId, userId, questionId) => {
+  const results = await ResultsUser.findAll({
+    where: {
+      session: parseInt(sessionId),
+      user_id: parseInt(userId),
+      question_id: parseInt(questionId) ? questionId : null
+    },
+    attributes: ["question_id", "user_choice"]
+  });
+  console.log(results, "2");
+  const check = results.map((v) => v.question_id);
+  if (check.length === 0) throw new Error("Not Found Result");
+  return results;
+};
+
 module.exports = {
-  createResult
+  createResult,
+  queryResult
 };

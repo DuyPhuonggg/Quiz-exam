@@ -13,15 +13,10 @@ resultsUserRouter.post(
 );
 
 resultsUserRouter.get(
-  "/:userId",
+  "/:sessionId",
   authMiddleware.verifyAccessToken,
-  resultsUserController.getListResult
-);
-
-resultsUserRouter.get(
-  "/:SessionId",
-  authMiddleware.verifyAccessToken,
-  resultsUserController.getResultBySessionId
+  validates(resultUserValidate.queryResult),
+  resultsUserController.getResult
 );
 
 module.exports = resultsUserRouter;

@@ -13,6 +13,14 @@ const createResult = Joi.object().keys({
     })
 }).unknown(true);
 
+const queryResult = Joi.object().keys({
+    query: Joi.object({
+        user_id: Joi.number().integer(),
+        question_id: Joi.number().integer(),
+    })
+}).unknown(true);
+
 module.exports = {
-    createResult
+    createResult,
+    queryResult
 }
