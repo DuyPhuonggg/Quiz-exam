@@ -11,6 +11,10 @@ const ResultsUser = db.define(
       primaryKey: true,
       allowNull: false
     },
+    session: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false

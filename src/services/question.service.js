@@ -43,6 +43,14 @@ const getQuestionById = async (id) => {
   return question;
 };
 
+const getQuestionByContent = async (content) => {
+    const question = await Questions.findOne({
+      where: { content : content }
+    });
+    if(!question) throw new Error("Not Found Question");
+    return question.id;
+}
+
 const updateQuestionById = async (questionId, body) => {
   const question = await Questions.findByPk(questionId);
   if (!question) throw new Error("Not found");
@@ -64,6 +72,7 @@ module.exports = {
   createQuestion,
   getListQuestion,
   getQuestionById,
+  getQuestionByContent,
   updateQuestionById,
   deleteQuestionById
 };
