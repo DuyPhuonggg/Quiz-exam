@@ -16,7 +16,8 @@ const createResult = catchAsync(async (req, res) => {
 const getResult = catchAsync(async (req, res) => {
   const sessionId = req.params.sessionId;
   const { question_id, user_id } = req.query;
-  const result = await resultUserServices.queryResult(sessionId, user_id, question_id);
+  const questionId = question_id ? question_id : null;
+  const result = await resultUserServices.queryResult(sessionId, parseInt(user_id), questionId);
   return res.status(httpStatus.OK).json({
     message: "Successfully",
     content: { user_id: parseInt(user_id), session_id: parseInt(sessionId), data: result }

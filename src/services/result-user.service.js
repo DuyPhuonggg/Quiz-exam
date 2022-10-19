@@ -2,6 +2,7 @@ const userServices = require("./user.service");
 const questionServices = require("./question.service");
 const ResultsUser = require("../models/results_user.model");
 const Answers = require("../models/answers.model");
+const { Op } = require("sequelize");
 
 const createResult = async (data) => {
   const { user_id, session, content } = data;
@@ -46,18 +47,31 @@ const createResult = async (data) => {
 };
 
 const queryResult = async (sessionId, userId, questionId) => {
-  const results = await ResultsUser.findAll({
-    where: {
-      session: parseInt(sessionId),
-      user_id: parseInt(userId),
-      question_id: parseInt(questionId) ? questionId : null
-    },
-    attributes: ["question_id", "user_choice"]
-  });
-  console.log(results, "2");
-  const check = results.map((v) => v.question_id);
-  if (check.length === 0) throw new Error("Not Found Result");
-  return results;
+  console.log(typeof(questionId),'2');
+  if(questionId === null) {
+    const results = await ResultsUser.findAll({
+      where: {
+          session: sessionId,
+          user_id: userId,
+        },
+      attributes: ["question_id", "user_choice"]
+    });
+    const check = results.map((v) => v.question_id);
+    if (check.length === 0) throw new Error("Not Found Result");
+    return results;
+  }
+    const results = await ResultsUser.findAll({
+      where: {
+          session: sessionId,
+          user_id: userId,
+          question_id: questionId
+        },
+      attributes: ["question_id", "user_choice"]
+    });
+    const check = results.map((v) => v.question_id);
+    if (check.length === 0) throw new Error("Not Found Result");
+    return results;
+  
 };
 
 module.exports = {

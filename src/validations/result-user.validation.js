@@ -16,7 +16,7 @@ const createResult = Joi.object().keys({
 const queryResult = Joi.object().keys({
     query: Joi.object({
         user_id: Joi.number().integer(),
-        question_id: Joi.number().integer(),
+        question_id: Joi.any().optional(),
     })
 }).unknown(true);
 
