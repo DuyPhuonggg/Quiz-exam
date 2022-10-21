@@ -12,7 +12,7 @@ answersRouter.post(
   AnswersController.createAnswer
 );
 
-answersRouter.put(
+answersRouter.patch(
   "/:answerId",
   authMiddleware.verifyAdmin,
   validates(answerValidation.updateAnswer),

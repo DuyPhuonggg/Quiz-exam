@@ -16,9 +16,9 @@ const updateAnswer = Joi.object()
       answerId: Joi.number().min(1).required()
     }),
     body: Joi.object().keys({
-      question_id: Joi.number().integer().required(),
-      content: Joi.string().min(1).required(),
-      is_correct: Joi.string().required()
+      question_id: Joi.number().integer(),
+      content: Joi.string().min(1),
+      is_correct: Joi.string()
     })
   })
   .unknown(true);

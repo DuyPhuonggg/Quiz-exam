@@ -26,7 +26,7 @@ userRouter.get(
   userController.findUserById
 );
 
-userRouter.put(
+userRouter.patch(
   "/:userId",
   authMiddleware.verifyAdmin,
   validates(userValidation.updateUser),

@@ -45,9 +45,11 @@ const doesExistAccount = async (username, password) => {
 const updateUserById = async (userId, body) => {
   const user = await Users.findByPk(userId);
   if (!user) throw new Error("User Not Found");
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(body.password, salt);
-  body.password = hash;
+  if(body.password) {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(body.password, salt);
+    body.password = hash;
+  }
   return await user.update({ ...body }, { where: { id: userId } });
 };
 

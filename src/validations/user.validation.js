@@ -41,9 +41,8 @@ const updateUser = Joi.object()
     body: Joi.object().keys({
       firstName: Joi.string().min(1).max(20),
       lastName: Joi.string().min(1).max(20),
-      username: Joi.string().alphanum().min(3).max(50).required(),
-      password: Joi.string().min(1).required(),
-      email: Joi.string().lowercase().email().min(5).max(50).required(),
+      username: Joi.string().alphanum().min(3).max(50),
+      email: Joi.string().lowercase().email().min(5).max(50),
       role: Joi.string().valid(role.ADMIN, role.USER)
     })
   })
