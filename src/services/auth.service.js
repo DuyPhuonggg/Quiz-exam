@@ -1,21 +1,21 @@
 const userServices = require("../services/user.service");
 const tokenServices = require("../services/token.service");
+const { EXPRISE_TIME } = require("../constant/enum");
 
 const register = async (data, clientId) => {
   const user = await userServices.createUser(data);
   if (!user) throw new Error("Cannot create user");
-  const accessToken = tokenServices.generateAccessToken(user);
-  const refreshToken = tokenServices.generateRefreshToken(user);
-  await tokenServices.saveToken(user, refreshToken, clientId);
-  return { user, accessToken, refreshToken };
+  const tokens = tokenServices.generateAuthToken(user);
+  await tokenServices.saveToken(user, tokens.refresh.token, clientId);
+  const { id, username, email } = user.toJSON();
+  return { id, username, email, tokens };
 };
 
 const login = async (username, password, clientId) => {
   const user = await userServices.doesExistAccount(username, password);
-  const accessToken = tokenServices.generateAccessToken(user);
-  const refreshToken = tokenServices.generateRefreshToken(user);
-  await tokenServices.saveToken(user, refreshToken, clientId);
-  return { accessToken, refreshToken };
+  const tokens = tokenServices.generateAuthToken(user);
+  await tokenServices.saveToken(user, tokens.refresh.token, clientId);
+  return tokens;
 };
 
 const logout = async (userId, clientId) => {
@@ -27,7 +27,17 @@ const refreshToken = async (userId, clientId) => {
   if (user) {
     const newAccessToken = tokenServices.generateAccessToken(user);
     const newRefreshToken = await tokenServices.updateToken(userId, clientId);
-    return { newAccessToken, newRefreshToken };
+    const { refresh_token } = newRefreshToken.toJSON();
+    return {
+      access: {
+        token: newAccessToken,
+        exprise_time: EXPRISE_TIME.ACCESS_TOKEN
+      },
+      refresh: {
+        token: refresh_token,
+        exprise_time: EXPRISE_TIME.REFRESH_TOKEN
+      }
+    };
   } else throw new Error("Not found User");
 };
 

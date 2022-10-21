@@ -9,7 +9,6 @@ const register = Joi.object()
       username: Joi.string().alphanum().min(3).max(50).required(),
       password: Joi.string().min(1).required(),
       email: Joi.string().lowercase().email().min(5).max(50).required(),
-      role: Joi.string().valid(role.ADMIN, role.USER)
     })
   })
   .unknown(true);

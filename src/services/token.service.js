@@ -2,28 +2,42 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const Token = require("../models/token.model");
 const userServices = require("../services/user.service");
+const { EXPRISE_TIME } = require("../constant/enum");
 
 const generateAccessToken = (user) => {
   const payload = {
     aud: user.id,
     role: user.role,
-    expiresIn: "1h"
+    expiresIn: EXPRISE_TIME.ACCESS_TOKEN
   };
   const secret = process.env.ACCESS_TOKEN_SECRET;
-  const JWT = jwt.sign(payload, secret);
-  return JWT;
+  return jwt.sign(payload, secret);
 };
 
 const generateRefreshToken = (user) => {
   const payload = {
     aud: user.id,
     role: user.role,
-    expiresIn: "1d"
+    expiresIn: EXPRISE_TIME.REFRESH_TOKEN
   };
   const secret = process.env.ACCESS_TOKEN_SECRET;
-  const JWT = jwt.sign(payload, secret);
-  return JWT;
+  return jwt.sign(payload, secret);
 };
+
+const generateAuthToken = (user) => {
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  return {
+    access : {
+      token: accessToken,
+      exprise_time: EXPRISE_TIME.ACCESS_TOKEN
+    },
+    refresh: {
+      token: refreshToken,
+      exprise_time: EXPRISE_TIME.REFRESH_TOKEN
+    }
+  }
+}
 
 const saveToken = async (user, refreshToken, clientId) => {
   const oldToken = await Token.findOne({
@@ -37,7 +51,7 @@ const saveToken = async (user, refreshToken, clientId) => {
       user_id: user.id,
       client_id: clientId,
       refresh_token: refreshToken,
-      expired_in: 1
+      expired_in: EXPRISE_TIME.REFRESH_TOKEN
     });
     return token;
   } else  throw new Error("Already login");
@@ -58,7 +72,7 @@ const updateToken = async (userId, clientId) => {
     user_id: userId,
     client_id: clientId,
     refresh_token: newRefreshToken,
-    expired_in: 1
+    expired_in: EXPRISE_TIME.REFRESH_TOKEN
   });
 };
 
@@ -76,6 +90,7 @@ const deleteToken = async (userId, clientId) => {
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
+  generateAuthToken,
   saveToken,
   updateToken,
   deleteToken

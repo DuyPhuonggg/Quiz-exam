@@ -8,7 +8,13 @@ const AnswersTypes = {
   FALSE: "false"
 };
 
+const EXPRISE_TIME = {
+  ACCESS_TOKEN: "60 minutes",
+  REFRESH_TOKEN: "1 days"
+};
+
 module.exports = {
   role,
-  AnswersTypes
+  AnswersTypes,
+  EXPRISE_TIME
 };

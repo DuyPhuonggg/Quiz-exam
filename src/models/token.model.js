@@ -1,5 +1,6 @@
 const db = require("../configs/database");
 const { DataTypes } = require("sequelize");
+const { EXPRISE_TIME } = require("../constant/enum");
 
 const Token = db.define(
   "Token",
@@ -23,8 +24,8 @@ const Token = db.define(
       allowNull: true
     },
     expired_in: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1
+      type: DataTypes.STRING,
+      defaultValue: EXPRISE_TIME.REFRESH_TOKEN
     },
     createdAt: DataTypes.DATE
   },
