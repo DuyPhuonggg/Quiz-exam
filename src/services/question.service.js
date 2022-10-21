@@ -23,7 +23,7 @@ const getListQuestion = async (options) => {
     limit: limit,
     include: {
       model: Answers,
-      attributes: ["id", "content", "is_correct"]
+      attributes: ["id", "content"]
     }
   });
   const data = pagination.getPaginationData(questions, page, size);

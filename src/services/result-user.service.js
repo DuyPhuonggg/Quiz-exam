@@ -2,14 +2,16 @@ const userServices = require("./user.service");
 const questionServices = require("./question.service");
 const ResultsUser = require("../models/results_user.model");
 const Answers = require("../models/answers.model");
-const { Op } = require("sequelize");
 
 const createResult = async (data) => {
   const { user_id, session, content } = data;
   const user = await userServices.findUserById(user_id);
   if (!user) throw new Error("Not Found User");
   const results = await ResultsUser.findAll({
-    where: { session: session }
+    where: {
+      user_id: user_id,
+      session: session
+    }
   });
   const sessions = results.map((v) => v.session);
   if (sessions.includes(session) === true)
@@ -47,31 +49,29 @@ const createResult = async (data) => {
 };
 
 const queryResult = async (sessionId, userId, questionId) => {
-  console.log(typeof(questionId),'2');
-  if(questionId === null) {
+  if (questionId === null) {
     const results = await ResultsUser.findAll({
       where: {
-          session: sessionId,
-          user_id: userId,
-        },
+        session: sessionId,
+        user_id: userId
+      },
       attributes: ["question_id", "user_choice"]
     });
     const check = results.map((v) => v.question_id);
     if (check.length === 0) throw new Error("Not Found Result");
     return results;
   }
-    const results = await ResultsUser.findAll({
-      where: {
-          session: sessionId,
-          user_id: userId,
-          question_id: questionId
-        },
-      attributes: ["question_id", "user_choice"]
-    });
-    const check = results.map((v) => v.question_id);
-    if (check.length === 0) throw new Error("Not Found Result");
-    return results;
-  
+  const results = await ResultsUser.findAll({
+    where: {
+      session: sessionId,
+      user_id: userId,
+      question_id: questionId
+    },
+    attributes: ["question_id", "user_choice"]
+  });
+  const check = results.map((v) => v.question_id);
+  if (check.length === 0) throw new Error("Not Found Result");
+  return results;
 };
 
 module.exports = {
