@@ -30,5 +30,11 @@ authRouter.post(
   validates(authValidation.refreshToken),
   authController.refreshToken
 );
+authRouter.post(
+  "/forgot-password",
+  authMiddleware.verifyAccessToken,
+  validates(authValidation.forgotPassword),
+  authController.forgotPassword
+);
 
 module.exports = authRouter;

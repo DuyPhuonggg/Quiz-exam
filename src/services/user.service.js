@@ -55,6 +55,14 @@ const updateUserById = async (userId, body) => {
   );
 };
 
+const updatePassword = async (username,newPassword) => {
+  const user = await Users.findOne({
+    where: { username: username }
+  });
+  if (!user) throw new Error("Username Incorrect!");
+  return await user.update({password: newPassword});
+}
+
 const deleteUserById = async (userId) => {
   const user = await Users.findByPk(userId);
   if (!user) throw new Error("User Not Found");
@@ -69,5 +77,6 @@ module.exports = {
   findUserById,
   doesExistAccount,
   updateUserById,
+  updatePassword,
   deleteUserById
 };

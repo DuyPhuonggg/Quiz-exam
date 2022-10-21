@@ -1,6 +1,7 @@
 const userServices = require("../services/user.service");
 const tokenServices = require("../services/token.service");
 const { EXPRISE_TIME } = require("../constant/enum");
+const bcrypt = require("bcrypt");
 
 const register = async (data, clientId) => {
   const user = await userServices.createUser(data);
@@ -41,9 +42,20 @@ const refreshToken = async (userId, clientId) => {
   } else throw new Error("Not found User");
 };
 
+const forgotPassword = async(username) => {
+  const newPassword = Math.floor(Math.random()*Math.pow(10,6));
+  const convertNewPassord = newPassword.toString();
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(convertNewPassord, salt);
+  const check = await userServices.updatePassword(username,hash);
+  if(!check) throw new Error("Update Password Failed");
+  else return convertNewPassord;
+}
+
 module.exports = {
   register,
   login,
   logout,
-  refreshToken
+  refreshToken,
+  forgotPassword
 };
