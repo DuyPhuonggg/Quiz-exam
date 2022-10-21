@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const createQuestion = Joi.object()
   .keys({
-    body: Joi.object().keys({
+    body: Joi.object({
       content: Joi.string().min(1).required()
     })
   })

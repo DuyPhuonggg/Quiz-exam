@@ -3,12 +3,7 @@ const Answers = require("../models/answers.model");
 const pagination = require("../utils/pagination");
 
 const createQuestion = async (data) => {
-  const question = await Questions.findAll({
-    where: { content: data }
-  });
-  if (!question) throw new Error("Question is already exist!");
-  const newQuestion = Questions.create({ ...data });
-  return newQuestion;
+    return await Questions.create({content: data});
 };
 
 const getListQuestion = async (options) => {
@@ -30,10 +25,10 @@ const getListQuestion = async (options) => {
   return data;
 };
 
-const getQuestionById = async (id) => {
+const getQuestionById = async (questionId) => {
   const question = await Questions.findAndCountAll({
     attributes: ["content"],
-    where: { id: id },
+    where: { id: questionId },
     include: {
       model: Answers,
       attributes: ["id", "content"]
@@ -44,12 +39,12 @@ const getQuestionById = async (id) => {
 };
 
 const getQuestionByContent = async (content) => {
-    const question = await Questions.findOne({
-      where: { content : content }
-    });
-    if(!question) throw new Error("Not Found Question");
-    return question.id;
-}
+  const question = await Questions.findOne({
+    where: { content: content }
+  });
+  if (!question) throw new Error("Not Found Question");
+  return question.id;
+};
 
 const updateQuestionById = async (questionId, body) => {
   const question = await Questions.findByPk(questionId);
@@ -63,9 +58,7 @@ const updateQuestionById = async (questionId, body) => {
 const deleteQuestionById = async (questionId) => {
   const question = await Questions.findByPk(questionId);
   if (!question) throw new Error("Not found");
-  await question.destroy({
-    where: { id: questionId }
-  });
+  await question.destroy({ where: { id: questionId } });
 };
 
 module.exports = {

@@ -11,7 +11,7 @@ const createUser = async (data) => {
 };
 
 const findAllUser = async (options) => {
-  const { role, page, size } = options;
+  const { page, size } = options;
   const { limit, offset } = pagination.getPagination(
     parseInt(page),
     parseInt(size)
@@ -49,9 +49,7 @@ const updateUserById = async (userId, body) => {
 };
 
 const updatePassword = async (username, newPassword) => {
-  const user = await Users.findOne({
-    where: { username: username }
-  });
+  const user = await Users.findOne({ where: { username: username } });
   if (!user) throw new Error("Username Incorrect!");
   return await user.update({ password: newPassword });
 };
@@ -59,9 +57,7 @@ const updatePassword = async (username, newPassword) => {
 const deleteUserById = async (userId) => {
   const user = await Users.findByPk(userId);
   if (!user) throw new Error("User Not Found");
-  await user.destroy({
-    where: { id: userId }
-  });
+  await user.destroy({ where: { id: userId } });
 };
 
 module.exports = {
