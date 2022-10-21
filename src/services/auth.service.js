@@ -42,15 +42,15 @@ const refreshToken = async (userId, clientId) => {
   } else throw new Error("Not found User");
 };
 
-const forgotPassword = async(username) => {
-  const newPassword = Math.floor(Math.random()*Math.pow(10,6));
+const forgotPassword = async (username) => {
+  const newPassword = Math.floor(Math.random() * Math.pow(10, 6));
   const convertNewPassord = newPassword.toString();
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(convertNewPassord, salt);
-  const check = await userServices.updatePassword(username,hash);
-  if(!check) throw new Error("Update Password Failed");
+  const check = await userServices.updatePassword(username, hash);
+  if (!check) throw new Error("Update Password Failed");
   else return convertNewPassord;
-}
+};
 
 module.exports = {
   register,

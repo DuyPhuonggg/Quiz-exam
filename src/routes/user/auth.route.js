@@ -30,6 +30,7 @@ authRouter.post(
   validates(authValidation.refreshToken),
   authController.refreshToken
 );
+
 authRouter.post(
   "/forgot-password",
   authMiddleware.verifyAccessToken,

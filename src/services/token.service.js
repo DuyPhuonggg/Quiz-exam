@@ -28,7 +28,7 @@ const generateAuthToken = (user) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
   return {
-    access : {
+    access: {
       token: accessToken,
       exprise_time: EXPRISE_TIME.ACCESS_TOKEN
     },
@@ -36,8 +36,8 @@ const generateAuthToken = (user) => {
       token: refreshToken,
       exprise_time: EXPRISE_TIME.REFRESH_TOKEN
     }
-  }
-}
+  };
+};
 
 const saveToken = async (user, refreshToken, clientId) => {
   const oldToken = await Token.findOne({
@@ -54,7 +54,7 @@ const saveToken = async (user, refreshToken, clientId) => {
       expired_in: EXPRISE_TIME.REFRESH_TOKEN
     });
     return token;
-  } else  throw new Error("Already login");
+  } else throw new Error("Already login");
 };
 
 const updateToken = async (userId, clientId) => {

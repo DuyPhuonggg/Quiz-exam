@@ -1,14 +1,13 @@
 const Users = require("../models/user.model");
 const pagination = require("../utils/pagination");
 const bcrypt = require("bcrypt");
-const { Op } =require("sequelize");
 
 const createUser = async (data) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(data.password, salt);
   data.password = hash;
-  const  user  = Users.create({ ...data });
-  return user ;
+  const user = Users.create({ ...data });
+  return user;
 };
 
 const findAllUser = async (options) => {
@@ -20,7 +19,7 @@ const findAllUser = async (options) => {
   const users = await Users.findAndCountAll({
     limit: limit,
     offset: offset,
-    attributes: ["id", "firstName", "lastName","username", "email"]
+    attributes: ["id", "firstName", "lastName", "username", "email"]
   });
   const data = pagination.getPaginationData(users, page, size);
   return data;
@@ -49,19 +48,16 @@ const updateUserById = async (userId, body) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(body.password, salt);
   body.password = hash;
-  return await user.update(
-    { ...body },
-    { where: { id: userId } }
-  );
+  return await user.update({ ...body }, { where: { id: userId } });
 };
 
-const updatePassword = async (username,newPassword) => {
+const updatePassword = async (username, newPassword) => {
   const user = await Users.findOne({
     where: { username: username }
   });
   if (!user) throw new Error("Username Incorrect!");
-  return await user.update({password: newPassword});
-}
+  return await user.update({ password: newPassword });
+};
 
 const deleteUserById = async (userId) => {
   const user = await Users.findByPk(userId);
