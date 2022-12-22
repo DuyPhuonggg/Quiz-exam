@@ -32,7 +32,7 @@ const refreshToken = catchAsync(async (req, res) => {
 const forgotPassword = catchAsync( async (req, res) => {
   const username = req.body.username;
   const newPassword = await authServices.forgotPassword(username);
-  res.send(response(httpStatus.OK,"Update Password Successfully",newPassword));
+  res.send(response(httpStatus.OK,"New Password",newPassword));
 })
 module.exports = {
   register,

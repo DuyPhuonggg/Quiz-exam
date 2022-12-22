@@ -16,6 +16,9 @@ const Questions = db.define(
       allowNull: false,
       unique: true
     },
+    image: {
+      type: DataTypes.ARRAY(DataTypes.STRING)
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },

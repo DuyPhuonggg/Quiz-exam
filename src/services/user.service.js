@@ -1,8 +1,10 @@
 const Users = require("../models/user.model");
 const pagination = require("../utils/pagination");
 const bcrypt = require("bcrypt");
+const cloudinary = require("../utils/cloudinary");
 
-const createUser = async (data) => {
+const createUser = async (data,filePath) => {
+
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(data.password, salt);
   data.password = hash;
@@ -42,7 +44,11 @@ const doesExistAccount = async (username, password) => {
   return user;
 };
 
-const updateUserById = async (userId, body) => {
+const updateUserById = async (userId, body,filePath) => {
+  const result = await cloudinary.uploader.upload(filePath);
+  console.log(result);  
+  body.profile_img = result.secure_url;
+  body.cloudinary_id = result.public_id;
   const user = await Users.findByPk(userId);
   if (!user) throw new Error("User Not Found");
   return await user.update({ ...body }, { where: { id: userId } });

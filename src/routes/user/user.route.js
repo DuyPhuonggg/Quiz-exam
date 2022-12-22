@@ -4,6 +4,7 @@ const { userController } = require("../../controller/index");
 const userValidation = require("../../validations/user.validation");
 const validates = require("../../middlewares/validation.middleware");
 const authMiddleware = require("../../middlewares/auth.middleware");
+const upload = require("../../utils/multer");
 
 userRouter.post(
   "/add",
@@ -28,7 +29,8 @@ userRouter.get(
 
 userRouter.patch(
   "/:userId",
-  authMiddleware.verifyAdmin,
+  authMiddleware.verifyAccessToken,
+  upload.single("image"),
   validates(userValidation.updateUser),
   userController.updatedUser
 );

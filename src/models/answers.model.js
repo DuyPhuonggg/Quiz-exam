@@ -20,6 +20,9 @@ const Answers = db.define(
       type: DataTypes.STRING,
       allowNull: false
     },
+    image: {
+      type: DataTypes.ARRAY(DataTypes.STRING)
+    },
     is_correct: {
       type: DataTypes.ENUM,
       values: [AnswersTypes.FALSE, AnswersTypes.TRUE],

@@ -42,6 +42,14 @@ const Users = db.define(
       values: [role.ADMIN, role.USER],
       defaultValue: role.USER
     },
+    profile_img: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    cloudinary_id: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },

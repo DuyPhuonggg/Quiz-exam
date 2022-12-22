@@ -5,7 +5,7 @@ const response = require("../utils/responseTemp");
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userServices.createUser(req.body);
-  const {id, firstName, lastName, username, email, role} = user.toJSON();
+  const {id, firstName, lastName, username, email, role } = user.toJSON();
   res.send(response(httpStatus.CREATED,"Create successfully",{id, firstName, lastName, username, email, role}));
 });
 
@@ -21,9 +21,9 @@ const findUserById = catchAsync(async (req, res) => {
 });
 
 const updatedUser = catchAsync(async (req, res) => {
-  const user = await userServices.updateUserById(req.params.userId, req.body);
-  const { id, firstName, lastName, username, email, role } = user.toJSON();
-  res.send(response(httpStatus.OK,"Update Successfully",{ id, firstName, lastName, username, email, role }));
+  const user = await userServices.updateUserById(req.params.userId, req.body,req.file.path);
+  const { id, firstName, lastName, username, email, role,profile_img,cloudinary_id  } = user.toJSON();
+  res.send(response(httpStatus.OK,"Update Successfully",{ id, firstName, lastName, username, email, role,profile_img,cloudinary_id }));
 });
 
 const deleteUser = catchAsync(async (req, res) => {
