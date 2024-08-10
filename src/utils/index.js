@@ -1,3 +1,3 @@
 module.exports.pagination = require("./pagination");
 module.exports.catchAsync = require("./catchAsync");
-module.exports.response = require("./responseTemp");
+module.exports.response = require("./handle-response");

@@ -1,7 +1,7 @@
 const questionServices = require("../services/question.service");
 const catchAsync = require("../utils/catchAsync");
 const httpStatus = require("http-status");
-const response = require("../utils/responseTemp");
+const response = require("../utils/handle-response");
 
 const createQuestion = catchAsync(async (req, res) => {
   const content = req.body.content;

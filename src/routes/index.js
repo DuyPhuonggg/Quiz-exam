@@ -1,5 +1,10 @@
-module.exports.userRouter = require('./user/user.route');
-module.exports.authRouter = require('./user/auth.route');
-module.exports.questionsRouter = require('./quiz-exam/questions.route');
-module.exports.answersRouter = require('./quiz-exam/answers.route');
-module.exports.resultsUserRouter = require('./quiz-exam/results-user.route');
+const userRouter = require("./user.route");
+const authRouter = require("./auth.route");
+
+const initRouter = (app) => {
+    app.use('/api/v1/auth', authRouter);
+    app.use('/api/v1/users', userRouter);
+
+}
+
+module.exports = initRouter;

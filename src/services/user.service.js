@@ -1,4 +1,4 @@
-const Users = require("../models/user.model");
+const Users = require("../models/users.model");
 const pagination = require("../utils/pagination");
 const bcrypt = require("bcrypt");
 const cloudinary = require("../utils/cloudinary");

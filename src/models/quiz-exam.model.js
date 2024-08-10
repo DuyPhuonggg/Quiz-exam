@@ -1,8 +1,10 @@
+const { Users } = require('./users.model');
+
 const {DataTypes} = require("sequelize");
 const db = require("../configs/database");
 
-const Questions = db.define(
-    "Questions",
+const QuizExam = db.define(
+    "Quiz Exam",
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,29 +13,26 @@ const Questions = db.define(
             allowNull: false
         },
         title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        content: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        images_url: {
             type: DataTypes.TEXT,
-            allowNull: true,
+            allowNull: false
         },
-        correct_answers: {
+        user_id: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: false
         },
-        incorrect_answers: {
+        count_down: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1800 // 30 minutes
+        },
+        question_ids: {
             type: DataTypes.TEXT,
             allowNull: false,
+            defaultValue: []
         },
-        quiz_exam_id: {
+        note: {
             type: DataTypes.TEXT,
-            allowNull: true,
-            defaultValue: null,
+            allowNull: false,
         }
     },
     {
@@ -42,7 +41,9 @@ const Questions = db.define(
     }
 );
 
-Questions.sync().then((result) => console.log("Table Questions :", result));
+QuizExam.hasMany(Users, {foreignKey: "user_id"});
+Users.belongsTo(QuizExam);
 
+QuizExam.sync().then((result) => console.log("Table QuizExam :", result));
 
-module.exports = Questions;
+module.exports = QuizExam;

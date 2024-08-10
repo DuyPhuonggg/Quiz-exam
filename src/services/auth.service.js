@@ -1,22 +1,22 @@
 const userServices = require("../services/user.service");
-const tokenServices = require("../services/token.service");
-const { EXPRISE_TIME } = require("../constant/enum");
+const { EXPIRE_TIME } = require("../constants/enum");
 const bcrypt = require("bcrypt");
 
-const register = async (data, clientId) => {
+const register = async (data,) => {
   const user = await userServices.createUser(data);
+
   if (!user) throw new Error("Cannot create user");
-  const tokens = tokenServices.generateAuthToken(user);
-  await tokenServices.saveToken(user, tokens.refresh.token, clientId);
+
+
   const { id, username, email } = user.toJSON();
-  return { id, username, email, tokens };
+  return { id, username, email };
 };
 
 const login = async (username, password, clientId) => {
   const user = await userServices.doesExistAccount(username, password);
-  const tokens = tokenServices.generateAuthToken(user);
-  await tokenServices.saveToken(user, tokens.refresh.token, clientId);
-  return tokens;
+  // const tokens = tokenServices.generateAuthToken(user);
+  // await tokenServices.saveToken(user, tokens.refresh.token, clientId);
+  return "tokens";
 };
 
 const logout = async (userId, clientId) => {
@@ -26,17 +26,17 @@ const logout = async (userId, clientId) => {
 const refreshToken = async (userId, clientId) => {
   const user = await userServices.findUserById(userId);
   if (user) {
-    const newAccessToken = tokenServices.generateAccessToken(user);
-    const newRefreshToken = await tokenServices.updateToken(userId, clientId);
-    const { refresh_token } = newRefreshToken.toJSON();
+
+
+    const { refresh_token } = "newRefreshToken".toJSON();
     return {
       access: {
-        token: newAccessToken,
-        exprise_time: EXPRISE_TIME.ACCESS_TOKEN
+        token: "newAccessToken",
+        exprise_time: EXPIRE_TIME.ACCESS_TOKEN
       },
       refresh: {
         token: refresh_token,
-        exprise_time: EXPRISE_TIME.REFRESH_TOKEN
+        exprise_time: EXPIRE_TIME.REFRESH_TOKEN
       }
     };
   } else throw new Error("Not found User");

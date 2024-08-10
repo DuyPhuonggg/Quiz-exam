@@ -1,5 +1,4 @@
 const Questions = require("../models/questions.model");
-const Answers = require("../models/answers.model");
 const pagination = require("../utils/pagination");
 
 const createQuestion = async (data) => {
