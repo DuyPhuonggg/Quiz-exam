@@ -24,17 +24,17 @@ const buildLog = (file, func, level, user, message) => {
 
 function info(file, user = "undefined", mess){
     const funcName = info.caller.name;
-    console.info(buildLog(file, funcName, levels.info, user, mess))
+    console.info(buildLog(file, funcName, levels.info, user, JSON.stringify(mess)))
 }
 
 function error(file, user = "undefined", mess){
     const funcName = error.caller.name;
-    console.error(buildLog(file, funcName, levels.error, user, mess))
+    console.error(buildLog(file, funcName, levels.error, user, JSON.stringify(mess)))
 }
 
 function success(file, user = "undefined", mess){
     const funcName = success.caller.name;
-    console.log(buildLog(file, funcName, levels.success, user, mess))
+    console.log(buildLog(file, funcName, levels.success, user, JSON.stringify(mess)))
 }
 
 module.exports = {

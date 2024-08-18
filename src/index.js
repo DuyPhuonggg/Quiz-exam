@@ -1,10 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const db = require("./configs/database");
-const logger = require('./logger')
+const logger = require('./logger');
 
 const initRouter = require("./routes");
-
+const db = require("./configs/database");
+const redis = require("./configs/redis");
 const app = express();
 
 require("dotenv").config();
@@ -15,18 +15,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.json());
 
-//Test database is connected
+// Connected database
 db.authenticate()
-    .then(() => logger.success(__filename, "admin", 'Database connected successfully.'))
-    .catch((err) => logger.success(__filename, "admin", err));
+    .then(() => logger.success(__filename, "root", 'Database connected successfully.'))
+    .catch((err) => logger.error(__filename, "root", err));
 
-//routes
+// Init redis
+redis.initRedis()
+
+// Init routes
 initRouter(app)
-// app.use("/api/users", userRouter);
-// app.use("/api/questions", questionsRouter);
-// app.use("/api/answers", answersRouter);
-// app.use("/api/results", resultsUserRouter);
 
-app.listen(PORT, () => {
-    console.log(`App running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>logger.success(__filename, "root", `App is listening at port ${PORT}`));
