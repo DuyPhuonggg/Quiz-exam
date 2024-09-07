@@ -7,7 +7,10 @@
     "dev": "nodemon --exec babel-node src/index.js",
     "generate-migration": "sequelize-cli migration:generate --migrations-path src/migrations",
     "migration:up": "sequelize-cli db:migrate",
-    "migration:down": "sequelize-cli db:migrate:undo"
+    "migration:down": "sequelize-cli db:migrate:undo",
+    "generate-seed": "sequelize-cli seed:generate --migrations-path src/seeds",
+    "seed": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo"
   },
   "keywords": [
     "tieng viet"

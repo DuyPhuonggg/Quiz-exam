@@ -1,5 +1,4 @@
 const userServices = require("../services/user.service");
-const catchAsync = require("../utils/catchAsync");
 const response = require("../helpers/handle-response.helper");
 const logger = require("../logger")
 
@@ -8,12 +7,18 @@ const logger = require("../logger")
 //     const {id, firstName, lastName, username, email, role} = user.toJSON();
 //     res.send(response(httpStatus.CREATED, "Create successfully", {id, firstName, lastName, username, email, role}));
 // });
-//
-// const findAllUser = catchAsync(async (req, res) => {
-//     const data = await userServices.findAllUser(req.query);
-//     res.send(response(httpStatus.OK, "Successfully", data));
-// });
-//
+
+const getAll = async (req, res) => {
+    const { email, username } = req.payload;
+    try {
+        console.log(req.payload);
+    } catch (error) {
+        const message = error.message ? error.message : error;
+        logger.error(__filename, email || username, message);
+        response.error(res, 500, "Internal Server Error");
+    }
+};
+
 // const findUserById = catchAsync(async (req, res) => {
 //     const user = await userServices.findUserById(req.params.userId);
 //     const {id, firstName, lastName, username, email, role} = user.toJSON();
@@ -44,7 +49,7 @@ const logger = require("../logger")
 
 module.exports = {
     // createUser,
-    // findAllUser,
+    getAll,
     // findUserById,
     // updatedUser,
     // deleteUser

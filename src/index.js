@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require('./logger');
@@ -7,23 +9,19 @@ const db = require("./configs/database");
 const redis = require("./configs/redis");
 const app = express();
 
-require("dotenv").config();
-
 const PORT = process.env.PORT;
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.json());
 
-// Connected database
-db.authenticate()
-    .then(() => logger.success(__filename, "root", 'Database connected successfully.'))
-    .catch((err) => logger.error(__filename, "root", err));
-
-// Init redis
-redis.initRedis()
-
 // Init routes
 initRouter(app)
 
-app.listen(PORT, () =>logger.success(__filename, "root", `App is listening at port ${PORT}`));
+app.listen(PORT, async () => {
+    logger.success(__filename, "root", `App is listening at port ${PORT}`);
+    await redis.initRedis();
+    db.authenticate()
+        .then(() => logger.success(__filename, "root", 'Database connected successfully.'))
+        .catch((err) => logger.error(__filename, "root", err));
+});

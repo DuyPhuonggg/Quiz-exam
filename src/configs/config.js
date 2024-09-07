@@ -1,5 +1,3 @@
-const loggingDev = (process.env.DB_LOGGING_DEV === true);
-
 module.exports = {
     development: {
         username: process.env.DB_USERNAME || 'postgres',
