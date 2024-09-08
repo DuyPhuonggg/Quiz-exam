@@ -12,5 +12,7 @@ authRouter.post("/reset-password", validateMiddleware.resetPassword, authControl
 
 authRouter.use(authMiddlewares.verifyToken)
 authRouter.post("/change-password", validateMiddleware.changePassword, authController.changePassword);
+authRouter.get("/permissions", authController.findAllPermissions);
+authRouter.get("/profile", authController.profile);
 
 module.exports = authRouter;

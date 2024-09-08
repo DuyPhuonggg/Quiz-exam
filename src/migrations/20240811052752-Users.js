@@ -1,5 +1,4 @@
 'use strict';
-
 const {ROLE, GENDER} = require("../constants/user.constant");
 
 module.exports = {

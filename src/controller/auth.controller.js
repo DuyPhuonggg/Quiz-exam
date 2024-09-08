@@ -1,33 +1,29 @@
 const userServices = require("../services/user.service");
 const redisServices = require("../services/redis.service");
-
-const {createToken} = require("../helpers/token.helper");
-const {randomNumber} = require("../helpers/random-number.helper");
+const authServices = require("../services/auth.service");
+const tokenHelper = require("../helpers/token.helper");
+const numberHelper = require("../helpers/number.helper");
 const response = require("../helpers/handle-response.helper");
-
 const redisKey = require("../constants/redis.constant");
-
 const logger = require("../logger");
 const bcrypt = require("bcrypt");
-const {OTP_EXPIRE_TIME} = process.env
+const {OTP_EXPIRE_TIME} = process.env;
 
 const AuthController = {
     getAccessToken: async (req, res) => {
         const {email} = req.body
         try {
             const user = await userServices.findOne({email: email });
-
             if (!user) {
                 logger.error(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
             }
 
-            const {accessToken} = createToken({
+            const {accessToken} = tokenHelper.createToken({
                 userId: user.id,
                 username: user.username,
                 email: user.email
             });
-
             logger.success(__filename, email, 'Get token successfully');
             response.success(res, 200, {accessToken}, 'Get token successfully');
         } catch (error) {
@@ -40,29 +36,15 @@ const AuthController = {
         const {username, email} = req.body;
         try {
             const userExits = await userServices.findOne({email: email});
-
             if (userExits) {
-                logger.info(__filename, email || username, 'Email already exists');
                 return response.error(res, 404, "Email already exists");
             }
 
             const newUser = await userServices.createOne(req.body);
-
             if (!newUser) {
                 logger.info(__filename, email || username, 'Cannot create user');
                 return response.error(res, 404, "Cannot create user");
             }
-
-            const {accessToken, refreshToken} = createToken({
-                userId: newUser.id,
-                username,
-                email
-            });
-
-            await userServices.updateOne({ id: newUser.id}, {
-                access_token: accessToken,
-                refresh_token: refreshToken
-            });
 
             logger.info(__filename, email || username, "Register successfully");
             response.success(res, 200, {}, 'OK');
@@ -76,9 +58,7 @@ const AuthController = {
         const {email, password} = req.body;
         try {
             const user = await userServices.findOne({email: email});
-
             if (!user) {
-                logger.error(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
             }
 
@@ -88,7 +68,7 @@ const AuthController = {
                 return response.error(res, 404, "Password incorrect");
             }
 
-            const {accessToken} = createToken({
+            const {accessToken} = tokenHelper.createToken({
                 userId: user.id,
                 username: user.username,
                 email: user.email
@@ -106,7 +86,6 @@ const AuthController = {
         const {email, old_password, new_password} = req.body;
         try {
             const user = await userServices.findOne({email: email});
-
             if (!user) {
                 logger.error(__filename, email, 'Email does not exists');
                 return response.error(res, 400, "Email does not exists");
@@ -121,7 +100,6 @@ const AuthController = {
             const salt = await bcrypt.genSalt(10);
             const newPassword = await bcrypt.hash(new_password, salt);
             await userServices.updateOne({email: email}, { password: newPassword});
-
             logger.success(__filename, email, 'Change password successfully');
             response.success(res, 200, '', 'OK');
         } catch (error) {
@@ -135,7 +113,6 @@ const AuthController = {
         const forgotPasswordKey = `${redisKey.FORGOT_PASSWORD}-${email}`
         try {
             const user = await userServices.findOne({email: email});
-
             if (!user) {
                 logger.error(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
@@ -147,7 +124,7 @@ const AuthController = {
                 logger.info(__filename, email, `Time to live of code ${codeOtp} is ${ttlCodeOtp} second(s)`);
                 return response.success(res, 200, codeOtp, `Code on time to live ${ttlCodeOtp}`);
             } else {
-                codeOtp = randomNumber(6);
+                codeOtp = numberHelper.random(6);
                 await redisServices.setKey(forgotPasswordKey, codeOtp, {EX: OTP_EXPIRE_TIME});
             }
 
@@ -164,14 +141,12 @@ const AuthController = {
         const forgotPasswordKey = `${redisKey.FORGOT_PASSWORD}-${email}`
         try {
             const user = await userServices.findOne({email: email});
-
             if (!user) {
                 logger.error(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
             }
 
             const codeOtp = await redisServices.getKey(forgotPasswordKey);
-
             if (codeOtp === code) {
                 const salt = await bcrypt.genSalt(10);
                 const newPassword = await bcrypt.hash(password, salt);
@@ -187,6 +162,37 @@ const AuthController = {
             const message = error.message ? error.message : error;
             logger.error(__filename, email, message);
             response.error(res, 500, "Reset password failed");
+        }
+    },
+    findAllPermissions: async (req, res) => {
+        const {email, username} = req.payload;
+        try {
+            const permission = await authServices.findAllPermissions(['createdAt', 'updatedAt']);
+            logger.success(__filename, email || username, 'Get permissions successfully');
+            response.success(res, 200, permission ? permission: [], 'OK');
+        } catch (error) {
+            const message = error.message ? error.message : error;
+            logger.error(__filename, email || username, message);
+            response.error(res, 500, "Get permissions failed");
+        }
+    },
+    profile: async (req, res) => {
+        const {email, username} = req.payload;
+        try {
+            const profile = await userServices.findOne({
+                email: email
+            }, ['password', 'access_token', 'refresh_token']);
+
+            if (!profile) {
+                return response.error(res, 404, "Not found profile");
+            }
+
+            logger.success(__filename, email || username, 'Get profile successfully');
+            response.success(res, 200, profile, 'OK');
+        } catch (error) {
+            const message = error.message ? error.message : error;
+            logger.error(__filename, email || username, message);
+            response.error(res, 500, "Get profile failed");
         }
     },
 }

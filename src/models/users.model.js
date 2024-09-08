@@ -1,5 +1,4 @@
 const {ROLE, GENDER} = require("../constants/user.constant");
-
 const {DataTypes} = require("sequelize");
 const db = require("../configs/database");
 
@@ -63,6 +62,11 @@ const Users = db.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        permissions: {
+            type: DataTypes.ARRAY(DataTypes.STRING),
+            allowNull: false,
+            defaultValue: [],
+        }
     },
     {
         freezeTableName: true,

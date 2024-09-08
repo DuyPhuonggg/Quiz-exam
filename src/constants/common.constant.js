@@ -8,7 +8,13 @@ const EXPIRE_TIME = {
     REFRESH_TOKEN: "1 days"
 };
 
+const PAGINATION_DEFAULT = {
+    limit: 10,
+    offset: 0,
+}
+
 module.exports = {
     AnswersTypes,
-    EXPIRE_TIME
+    EXPIRE_TIME,
+    PAGINATION_DEFAULT
 };

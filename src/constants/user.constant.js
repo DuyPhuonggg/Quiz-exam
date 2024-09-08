@@ -10,7 +10,12 @@ const GENDER = {
     UNKNOWN: "unknown",
 }
 
+const WHITE_LIST_ADMIN = [
+    'GET/api/v1/users',
+]
+
 module.exports = {
     ROLE,
-    GENDER
+    GENDER,
+    WHITE_LIST_ADMIN
 }

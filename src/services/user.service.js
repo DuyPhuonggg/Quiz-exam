@@ -1,5 +1,4 @@
 const Users = require("../models/users.model");
-const pagination = require("../utils/pagination");
 const bcrypt = require("bcrypt");
 
 const UserService = {
@@ -8,29 +7,28 @@ const UserService = {
         data.password = await bcrypt.hash(data.password, salt);
         return await Users.create({...data});
     },
-    findOne: async (condition, attributes = []) => {
+    findOne: async (condition, ignore = []) => {
         return await Users.findOne({
-            attributes: { exclude: attributes },
+            attributes: {exclude: ignore},
             where: condition,
         })
     },
-    findAll: async (options) => {
-        const {page, size} = options;
-        const {limit, offset} = pagination.getPagination(
-            parseInt(page),
-            parseInt(size)
-        );
-        const users = await Users.findAndCountAll({
-            limit: limit,
-            offset: offset,
-            attributes: ["id", "firstName", "lastName", "username", "email"]
+    findAllAndCount: async (condition, options, ignore = []) => {
+        const {count, rows} = await Users.findAndCountAll({
+            ...options,
+            where: condition,
+            attributes: {exclude: ignore}
         });
-        return pagination.getPaginationData(users, page, size);
+
+        return {
+            count,
+            data: rows?.length ? rows : [],
+        }
     },
     updateOne: async (condition, body) => {
         return await Users.update(
-    {...body},
-    { where: condition }
+            {...body},
+            {where: condition}
         );
     },
     deleteOne: async (condition) => {

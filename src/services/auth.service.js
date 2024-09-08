@@ -1,66 +1,17 @@
-const userServices = require("../services/user.service");
-const {EXPIRE_TIME} = require("../constants/enum");
-const bcrypt = require("bcrypt");
-const logger = require("../logger");
+const Permissions = require('../models/permissions.model');
 
-const register = async (data) => {
-    const {username, password} = data;
+const AuthService = {
+    findOne: async (condition, ignore = []) => {
+        return await Permissions.findOne({
+            attributes: { exclude: ignore },
+            where: condition,
+        });
+    },
+    findAllPermissions: async (ignore = []) => {
+        return await Permissions.findAll({
+            attributes: { exclude: ignore }
+        });
+    }
+}
 
-
-
-
-
-
-
-
-    // const { id, username, email } = user.toJSON();
-    return user
-};
-
-const login = async (username, password, clientId) => {
-    const user = await userServices.doesExistAccount(username, password);
-    // const tokens = tokenServices.generateAuthToken(user);
-    // await tokenServices.saveToken(user, tokens.refresh.token, clientId);
-    return "tokens";
-};
-
-const logout = async (userId, clientId) => {
-    await tokenServices.deleteToken(userId, clientId);
-};
-
-const refreshToken = async (userId, clientId) => {
-    const user = await userServices.findUserById(userId);
-    if (user) {
-
-
-        const {refresh_token} = "newRefreshToken".toJSON();
-        return {
-            access: {
-                token: "newAccessToken",
-                exprise_time: EXPIRE_TIME.ACCESS_TOKEN
-            },
-            refresh: {
-                token: refresh_token,
-                exprise_time: EXPIRE_TIME.REFRESH_TOKEN
-            }
-        };
-    } else throw new Error("Not found User");
-};
-
-const forgotPassword = async (username) => {
-    const newPassword = Math.floor(Math.random() * Math.pow(10, 6));
-    const convertNewPassord = newPassword.toString();
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(convertNewPassord, salt);
-    const check = await userServices.updatePassword(username, hash);
-    if (!check) throw new Error("Update Password Failed");
-    else return convertNewPassord;
-};
-
-module.exports = {
-    register,
-    login,
-    logout,
-    refreshToken,
-    forgotPassword
-};
+module.exports = AuthService;
