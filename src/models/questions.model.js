@@ -14,11 +14,15 @@ const Questions = db.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        content: {
+        categories: {
             type: DataTypes.STRING,
             allowNull: true,
         },
         images_url: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        images_id: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
@@ -30,10 +34,13 @@ const Questions = db.define(
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        quiz_exam_id: {
-            type: DataTypes.TEXT,
+        author: {
+            type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: null,
+            validate: {
+                isEmail: true,
+                isLowercase: true,
+            },
         }
     },
     {
@@ -41,8 +48,5 @@ const Questions = db.define(
         timestamps: true,
     }
 );
-
-Questions.sync().then((result) => console.log("Table Questions :", result));
-
 
 module.exports = Questions;
