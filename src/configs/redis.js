@@ -1,7 +1,14 @@
 const redis = require('redis');
 const logger = require('../logger');
+const {REDIS_HOST, REDIS_PORT} = process.env;
 
-const clientRedis = redis.createClient();
+const clientRedis = redis.createClient({
+    socket: {
+        host: REDIS_HOST || 'redis',
+        port: REDIS_PORT || 6379
+    }
+});
+
 const statusConnectRedis = {
     CONNECT: 'connect',
     END: 'end',

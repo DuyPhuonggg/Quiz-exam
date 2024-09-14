@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: "quiz-exam-api"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_TYPE=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123456
+      - DB_NAME=quiz-exam
+      - DB_LOGGING_DEV=false
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    container_name: "redis_server"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  postgres:
+    image: "postgres:13-alpine"
+    container_name: "database"
+    environment:
+      - POSTGRES_DB=quiz-exam
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local

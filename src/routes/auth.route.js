@@ -1,8 +1,8 @@
 const express = require("express");
 const authRouter = express.Router();
+const authController = require("../controllers/auth.controller");
+const authMiddlewares = require("../middlewares/auth.middleware");
 const validateMiddleware = require("../middlewares/validation.middleware");
-const authController = require("../controller/auth.controller");
-const {authMiddlewares} = require("../middlewares");
 
 authRouter.post("/access-token", authController.getAccessToken);
 authRouter.post("/register", validateMiddleware.register, authController.register);
