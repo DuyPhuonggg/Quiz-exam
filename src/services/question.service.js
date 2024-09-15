@@ -1,4 +1,6 @@
 const Questions = require("../models/questions.model");
+const Categories = require("../models/categories.model");
+const Users = require("../models/users.model");
 
 //
 // const getListQuestion = async (options) => {
@@ -56,6 +58,39 @@ const Questions = require("../models/questions.model");
 const QuestionServices = {
     createOne: async (data) => {
       return await Questions.create(data);
+    },
+    createMany: async (data) => {
+        return await Questions.bulkCreate(data);
+    },
+    findCategories: async (ignore = [], options = {}) => {
+        return await Categories.findAll({
+            attributes: { exclude: ignore },
+            ...options
+        });
+    },
+    findCategory: async (condition, ignore = []) => {
+        return await Categories.findOne({
+            attributes: {exclude: ignore},
+            where: condition,
+        })
+    },
+    findAllAndCount: async (condition, options = {}, ignore = []) => {
+        const {count, rows} = await Questions.findAndCountAll({
+            ...options,
+            where: condition,
+            attributes: {exclude: ignore}
+        });
+
+        return {
+            count,
+            data: rows?.length ? rows : [],
+        }
+    },
+    find: async (condition, ignore = []) => {
+        return await Questions.findOne({
+            attributes: {exclude: ignore},
+            where: condition,
+        })
     }
 }
 

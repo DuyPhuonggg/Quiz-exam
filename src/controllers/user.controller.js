@@ -33,7 +33,7 @@ const UserController = {
         const {email, username} = req.payload;
         const {page, size, email: emailQuery} = req.query;
         try {
-            const {limit, offset} = commonHelper.getPagination(page, size)
+            const {limit, offset} = commonHelper.getPagination(page, size);
             const options = {
                 order: [['createdAt', 'DESC']],
                 limit: limit,

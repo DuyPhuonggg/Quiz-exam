@@ -1,4 +1,6 @@
 const AuthSchema = require('../validations/auth.validation');
+const UserSchema = require('../validations/user.validation');
+const QuestionSchema = require('../validations/question.validation');
 const response = require('../helpers/handle-response.helper');
 const logger = require('../logger');
 
@@ -50,7 +52,7 @@ const ValidationMiddleware = {
     },
     createUser: async (req, res, next) => {
         const {email, username} = req.body;
-        const {error} = await AuthSchema.createUser.validate(req);
+        const {error} = await UserSchema.createUser.validate(req);
         if (error) {
             logger.info(__filename, email || username || 'Unknown', error?.details);
             return response.error(res, 404, error?.details[0]?.message);
@@ -59,7 +61,7 @@ const ValidationMiddleware = {
     },
     updatedUser: async (req, res, next) => {
         const {email, username} = req.body;
-        const {error} = await AuthSchema.updatedUser.validate(req);
+        const {error} = await UserSchema.updatedUser.validate(req);
         if (error) {
             logger.info(__filename, email || username || 'Unknown', error?.details);
             return response.error(res, 404, error?.details[0]?.message);
@@ -68,7 +70,7 @@ const ValidationMiddleware = {
     },
     bulkUpdatedUser: async (req, res, next) => {
         const {email, username} = req.body;
-        const {error} = await AuthSchema.bulkUpdatedUser.validate(req);
+        const {error} = await UserSchema.bulkUpdatedUser.validate(req);
         if (error) {
             logger.info(__filename, email || username || 'Unknown', error?.details);
             return response.error(res, 404, error?.details[0]?.message);
@@ -77,13 +79,31 @@ const ValidationMiddleware = {
     },
     bulkDeleteUser: async (req, res, next) => {
         const {email, username} = req.body;
-        const {error} = await AuthSchema.bulkDeleteUser.validate(req);
+        const {error} = await UserSchema.bulkDeleteUser.validate(req);
         if (error) {
             logger.info(__filename, email || username || 'Unknown', error?.details);
             return response.error(res, 404, error?.details[0]?.message);
         }
         next()
-    }
+    },
+    createQuestion: async (req, res, next) => {
+        const {email, username} = req.body;
+        const {error} = await QuestionSchema.createQuestion.validate(req);
+        if (error) {
+            logger.info(__filename, email || username || 'Unknown', error?.details);
+            return response.error(res, 404, error?.details[0]?.message);
+        }
+        next()
+    },
+    createManyQuestion: async (req, res, next) => {
+        const {email, username} = req.body;
+        const {error} = await QuestionSchema.bulkCreateQuestion.validate(req);
+        if (error) {
+            logger.info(__filename, email || username || 'Unknown', error?.details);
+            return response.error(res, 404, error?.details[0]?.message);
+        }
+        next()
+    },
 }
 
 module.exports = ValidationMiddleware;

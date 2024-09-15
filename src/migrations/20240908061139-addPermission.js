@@ -1,7 +1,4 @@
 'use strict';
-
-const {ROLE, GENDER} = require("../constants/user.constant");
-
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.addColumn('Users','permissions', {
@@ -11,7 +8,7 @@ module.exports = {
         });
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface) {
         await queryInterface.removeColumn('Users', 'permissions');
     }
 };

@@ -23,6 +23,26 @@ const PERMISSION = [
         method: 'DELETE',
         base_url: '/api/v1/users',
         description: 'Cancel user(s)',
+    },
+    {
+        method: 'GET',
+        base_url: '/api/v1/question',
+        description: 'Get question(s) infomation',
+    },
+    {
+        method: 'POST',
+        base_url: '/api/v1/question',
+        description: 'Create new question(s)',
+    },
+    {
+        method: 'PATCH',
+        base_url: '/api/v1/question',
+        description: 'Updated some information of question(s)',
+    },
+    {
+        method: 'DELETE',
+        base_url: '/api/v1/question',
+        description: 'Cancel question(s)',
     }
 ]
 

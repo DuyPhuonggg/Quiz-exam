@@ -10,6 +10,7 @@ module.exports = {
             },
             title: {
                 type: Sequelize.DataTypes.STRING,
+                unique: true,
                 allowNull: false,
             },
             categories: {
@@ -52,7 +53,7 @@ module.exports = {
         });
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface) {
         await queryInterface.dropTable('Questions');
     }
 };

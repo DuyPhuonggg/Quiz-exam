@@ -12,6 +12,7 @@ const Questions = db.define(
         },
         title: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
         },
         categories: {
@@ -27,11 +28,11 @@ const Questions = db.define(
             allowNull: true,
         },
         correct_answers: {
-            type: DataTypes.TEXT,
+            type: DataTypes.ARRAY(DataTypes.JSON),
             allowNull: false,
         },
         incorrect_answers: {
-            type: DataTypes.TEXT,
+            type: DataTypes.ARRAY(DataTypes.JSON),
             allowNull: false,
         },
         author: {
