@@ -24,7 +24,7 @@ const AuthController = {
                 username: user.username,
                 email: user.email
             });
-            logger.success(__filename, email, 'Get token successfully');
+            logger.success(__filename, email, 'Get token');
             response.success(res, 200, {accessToken}, 'Get token successfully');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -46,8 +46,8 @@ const AuthController = {
                 return response.error(res, 404, "Cannot create user");
             }
 
-            logger.info(__filename, email || username, "Register successfully");
-            response.success(res, 200, {}, 'OK');
+            logger.success(__filename, email || username, "Register");
+            response.success(res, 200, {}, 'Register success');
         } catch (error) {
             const message = error.message ? error.message : error;
             logger.error(__filename, email || username, message);
@@ -64,7 +64,7 @@ const AuthController = {
 
             const isPassword = await bcrypt.compare(password, user.password);
             if (!isPassword) {
-                logger.error(__filename, email, 'Password incorrect');
+                logger.info(__filename, email, 'Password incorrect');
                 return response.error(res, 404, "Password incorrect");
             }
 
@@ -74,8 +74,8 @@ const AuthController = {
                 email: user.email
             });
 
-            logger.success(__filename, email, 'Login successfully');
-            response.success(res, 200, {accessToken}, 'Login successfully');
+            logger.success(__filename, email, 'Login');
+            response.success(res, 200, {accessToken}, 'Login success');
         } catch (error) {
             const message = error.message ? error.message : error;
             logger.error(__filename, email, message);
@@ -87,20 +87,20 @@ const AuthController = {
         try {
             const user = await userServices.findOne({email: email});
             if (!user) {
-                logger.error(__filename, email, 'Email does not exists');
+                logger.info(__filename, email, 'Email does not exists');
                 return response.error(res, 400, "Email does not exists");
             }
 
             const isMatchPassword = await bcrypt.compare(old_password, user.password);
             if (!isMatchPassword) {
-                logger.error(__filename, email, 'Password incorrect');
+                logger.info(__filename, email, 'Password incorrect');
                 return response.error(res, 400, "Password incorrect");
             }
 
             const salt = await bcrypt.genSalt(10);
             const newPassword = await bcrypt.hash(new_password, salt);
             await userServices.updateOne({email: email}, { password: newPassword});
-            logger.success(__filename, email, 'Change password successfully');
+            logger.success(__filename, email, 'Change password');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -114,7 +114,7 @@ const AuthController = {
         try {
             const user = await userServices.findOne({email: email});
             if (!user) {
-                logger.error(__filename, email, 'Email does not exists');
+                logger.info(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
             }
 
@@ -128,7 +128,7 @@ const AuthController = {
                 await redisServices.setKey(forgotPasswordKey, codeOtp, {EX: OTP_EXPIRE_TIME});
             }
 
-            logger.success(__filename, email, 'Get code successfully');
+            logger.success(__filename, email, 'Get code');
             response.success(res, 200, codeOtp, 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -142,7 +142,7 @@ const AuthController = {
         try {
             const user = await userServices.findOne({email: email});
             if (!user) {
-                logger.error(__filename, email, 'Email does not exists');
+                logger.info(__filename, email, 'Email does not exists');
                 return response.error(res, 404, "Email does not exists");
             }
 
@@ -152,11 +152,11 @@ const AuthController = {
                 const newPassword = await bcrypt.hash(password, salt);
                 await userServices.updateOne({email: email}, {password: newPassword});
             } else {
-                logger.error(__filename, email, 'Reset password failed');
+                logger.info(__filename, email, 'Reset password failed');
                 return response.error(res, 400, "Reset password failed");
             }
 
-            logger.success(__filename, email, 'Reset password successfully');
+            logger.success(__filename, email, 'Reset password');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -168,7 +168,7 @@ const AuthController = {
         const {email, username} = req.payload;
         try {
             const permission = await authServices.findAllPermissions(['createdAt', 'updatedAt']);
-            logger.success(__filename, email || username, 'Get permissions successfully');
+            logger.success(__filename, email || username, 'Get permissions');
             response.success(res, 200, permission ? permission: [], 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;

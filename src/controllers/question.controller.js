@@ -9,8 +9,8 @@ const QuestionController = {
         const {email, username} = req.payload;
         const {title, categories, images_url, images_id, correct_answers, incorrect_answers} = req.body;
         try {
-            const exitsQuestion = await questionServices.findOne({
-                title: title,
+            const exitsQuestion = await questionServices.find({
+                title: title.trim(),
             });
 
             if (exitsQuestion) {
@@ -27,7 +27,7 @@ const QuestionController = {
             }
 
             const createBody = {
-                title: title,
+                title: title.trim(),
                 categories: categoriesMapping.join(","),
                 images_url: images_url,
                 images_id: images_id,
@@ -62,14 +62,18 @@ const QuestionController = {
         const { id: questionId } = req.params;
         try {
             if (!questionId || ['null', 'undefined'].includes(questionId)) {
-                return response.error(res, 404, "Bad Request");
+                return response.error(res, 404, "Question id not allowed");
             }
 
             const question = await questionServices.find(
                 { id: questionId },
                 ['createdAt', 'updatedAt']
             );
-            logger.info(__filename, email || username, "Get question successfully");
+            if (!question) {
+                return response.error(res, 404, "Question does not exist");
+            }
+
+            logger.success(__filename, email || username, "Get question");
             response.success(res, 200, question, 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -94,7 +98,7 @@ const QuestionController = {
 
             const ignoreAttribute = ['correct_answers', 'incorrect_answers']
             const newQuestion = await questionServices.findAllAndCount(condition, options, ignoreAttribute);
-            logger.info(__filename, email || username, "Get question(s) successfully");
+            logger.success(__filename, email || username, "Get question(s)");
             response.success(res, 200, newQuestion, 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -104,22 +108,24 @@ const QuestionController = {
     },
     updateOne: async (req, res) => {
         const {email, username} = req.payload;
+        const { id: questionId } = req.params;
         try {
-            const newQuestion = await questionServices.createOne(req.body);
-            logger.info(__filename, email || username, "Create user successfully");
-            response.success(res, 200, newQuestion, 'OK');
-        } catch (error) {
-            const message = error.message ? error.message : error;
-            logger.error(__filename, email || username, message);
-            response.error(res, 500, "Internal Server Error");
-        }
-    },
-    bulkUpdate: async (req, res) => {
-        const {email, username} = req.payload;
-        try {
-            const newQuestion = await questionServices.createOne(req.body);
-            logger.info(__filename, email || username, "Create user successfully");
-            response.success(res, 200, newQuestion, 'OK');
+            if (!questionId || ['null', 'undefined'].includes(questionId) || Object.keys(req.body).length === 0) {
+                return response.error(res, 404, "Bad Request");
+            }
+
+            const question = await questionServices.find(
+                { id: questionId },
+                ['createdAt', 'updatedAt']
+            );
+
+            if (!question) {
+                return response.error(res, 404, "Not Found");
+            }
+
+            await questionServices.update({ id: questionId }, req.body);
+            logger.success(__filename, email || username, "Updated question");
+            response.success(res, 200, null, 'Update question success');
         } catch (error) {
             const message = error.message ? error.message : error;
             logger.error(__filename, email || username, message);
@@ -128,10 +134,23 @@ const QuestionController = {
     },
     deleteOne: async (req, res) => {
         const {email, username} = req.payload;
+        const {id} = req.params;
         try {
-            const newQuestion = await questionServices.createOne(req.body);
-            logger.info(__filename, email || username, "Create user successfully");
-            response.success(res, 200, newQuestion, 'OK');
+            if (!id || ['null', 'undefined'].includes(id)) {
+                return response.error(res, 400, 'Bad request');
+            }
+
+            const existQuestion = await questionServices.find({
+                id: id
+            })
+
+            if (!existQuestion) {
+                return response.error(res, 400, 'Not found');
+            }
+
+            await questionServices.delete({ id: id });
+            logger.info(__filename, email || username, "Delete question successfully");
+            response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
             logger.error(__filename, email || username, message);
@@ -140,10 +159,22 @@ const QuestionController = {
     },
     bulkDelete: async (req, res) => {
         const {email, username} = req.payload;
+        const questionsId = req.body;
         try {
-            const newQuestion = await questionServices.createOne(req.body);
-            logger.info(__filename, email || username, "Create user successfully");
-            response.success(res, 200, newQuestion, 'OK');
+            if (!questionsId.length) {
+                logger.info(__filename, email || username, 'Empty data to bulk delete questions');
+                return response.success(res, 200, '', 'OK');
+            }
+
+            for (let questionId of questionsId) {
+                const questionModel = await questionServices.find({id: questionId});
+                if (questionModel) {
+                    await questionServices.delete({id: questionModel.dataValues.id});
+                }
+            }
+
+            logger.success(__filename, email, 'Delete questions successfully');
+            response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
             logger.error(__filename, email || username, message);

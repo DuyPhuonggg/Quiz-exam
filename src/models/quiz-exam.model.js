@@ -1,49 +1,52 @@
-const { Users } = require('./users.model');
-
-const {DataTypes} = require("sequelize");
-const db = require("../configs/database");
-
-const QuizExam = db.define(
-    "Quiz Exam",
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false
+const QuizExams  = (db, DataTypes) => {
+    return db.define(
+        "QuizExams",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+                allowNull: false
+            },
+            name: {
+                type: DataTypes.TEXT,
+                allowNull: false
+            },
+            status: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
+            image_url: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            images_id: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            question_ids: {
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                allowNull: false,
+            },
+            timer_per_question: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 30
+            },
+            author: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                validate: {
+                    isEmail: true,
+                    isLowercase: true,
+                },
+            }
         },
-        title: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
-        user_id: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
-        count_down: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1800 // 30 minutes
-        },
-        question_ids: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-            defaultValue: []
-        },
-        note: {
-            type: DataTypes.TEXT,
-            allowNull: false,
+        {
+            freezeTableName: true,
+            timestamps: true,
         }
-    },
-    {
-        freezeTableName: true,
-        timestamps: true,
-    }
-);
+    );
+};
 
-QuizExam.hasMany(Users, {foreignKey: "user_id"});
-Users.belongsTo(QuizExam);
-
-QuizExam.sync().then((result) => console.log("Table QuizExam :", result));
-
-module.exports = QuizExam;
+module.exports = QuizExams;

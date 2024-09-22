@@ -11,9 +11,8 @@ questionRouter.post("/bulk", validateMiddleware.createManyQuestion, questionCont
 questionRouter.get("/all", questionController.findAll);
 questionRouter.get("/categories", questionController.getCategories);
 questionRouter.get("/:id", questionController.findOne);
-questionRouter.patch("/bulk", validateMiddleware.bulkUpdatedUser, questionController.bulkUpdate);
-questionRouter.patch("/:id", validateMiddleware.createQuestion, questionController.updateOne);
-questionRouter.delete("/bulk", validateMiddleware.bulkDeleteUser, questionController.bulkDelete);
+questionRouter.patch("/:id", validateMiddleware.updateQuestion, questionController.updateOne);
+questionRouter.delete("/bulk", validateMiddleware.bulkDeleteById, questionController.bulkDelete);
 questionRouter.delete("/:id", questionController.deleteOne);
 
 module.exports = questionRouter;

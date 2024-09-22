@@ -22,6 +22,6 @@ app.listen(PORT, async () => {
     logger.success(__filename, "root", `App is listening at port ${PORT}`);
     await redis.initRedis();
     db.authenticate()
-        .then(() => logger.success(__filename, "root", 'Database connected successfully.'))
+        .then(() => logger.success(__filename, "root", 'Database is connected'))
         .catch((err) => logger.error(__filename, "root", err));
 });

@@ -1,5 +1,4 @@
 const path = require("path");
-
 const levels = {
     error: 'error',
     warn: 'warn',
@@ -7,7 +6,6 @@ const levels = {
     debug: 'debug',
     success: 'success',
 }
-
 const buildLog = (file, func, level, user, message) => {
     const createdAt = new Date();
 
@@ -22,23 +20,19 @@ const buildLog = (file, func, level, user, message) => {
     return JSON.stringify(dataLogger)
 }
 
-function info(file, user = "undefined", mess){
-    const funcName = info.caller.name;
-    console.info(buildLog(file, funcName, levels.info, user, JSON.stringify(mess)))
+const Logger = {
+    info: function (file, user = "undefined", mess) {
+        const funcName = this.info.caller.name;
+        console.info(buildLog(file, funcName, levels.info, user, '[INFO] ' + JSON.stringify(mess)))
+    },
+    error: function (file, user = "undefined", mess) {
+        const funcName = this.error.caller.name;
+        console.error(buildLog(file, funcName, levels.error, user, '[ERROR] ' + JSON.stringify(mess)))
+    },
+    success: function (file, user = "undefined", mess) {
+        const funcName = this.success.caller.name;
+        console.log(buildLog(file, funcName, levels.success, user, '[SUCCESS] ' + JSON.stringify(mess)))
+    }
 }
 
-function error(file, user = "undefined", mess){
-    const funcName = error.caller.name;
-    console.error(buildLog(file, funcName, levels.error, user, JSON.stringify(mess)))
-}
-
-function success(file, user = "undefined", mess){
-    const funcName = success.caller.name;
-    console.log(buildLog(file, funcName, levels.success, user, JSON.stringify(mess)))
-}
-
-module.exports = {
-    info,
-    error,
-    success
-}
+module.exports = Logger;

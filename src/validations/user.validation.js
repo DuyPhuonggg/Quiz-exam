@@ -17,7 +17,7 @@ const updatedUserBody = {
 };
 
 const UserSchema = {
-    createUser: Joi.object()
+    create: Joi.object()
         .keys({
             body: Joi.object().keys({
                 first_name: Joi.string().min(1).max(20),
@@ -31,14 +31,14 @@ const UserSchema = {
             })
         })
         .unknown(true),
-    updatedUser: Joi.object()
+    updated: Joi.object()
         .keys({
             body: Joi.object().keys({
                 ...updatedUserBody
             })
         })
         .unknown(true),
-    bulkUpdatedUser: Joi.object()
+    bulkUpdated: Joi.object()
         .keys({
             body: Joi.array().items(Joi.object().keys({
                 ...updatedUserBody,
@@ -46,9 +46,9 @@ const UserSchema = {
             }))
         })
         .unknown(true),
-    bulkDeleteUser: Joi.object()
+    bulkDelete: Joi.object()
         .keys({
-            body: Joi.array().items(Joi.string())
+            body: Joi.array().items(Joi.string()).min(1).required()
         })
         .unknown(true)
 }

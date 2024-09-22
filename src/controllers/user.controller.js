@@ -20,7 +20,7 @@ const UserController = {
                 return response.error(res, 404, "Cannot create user");
             }
 
-            logger.info(__filename, email || username, "Create user successfully");
+            logger.success(__filename, email || username, "Create user");
             response.success(res, 200, {}, 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -52,7 +52,7 @@ const UserController = {
                 options,
                 ['password', 'access_token', 'refresh_token', 'permissions'],
             );
-            logger.success(__filename, email, 'Get list users successfully');
+            logger.success(__filename, email, 'Get user(s)');
             response.success(res, 200, {count, data});
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -73,7 +73,7 @@ const UserController = {
                 return response.error(res, 500, "User not found");
             }
 
-            logger.success(__filename, email, 'Get user successfully');
+            logger.success(__filename, email, 'Get user');
             response.success(res, 200, user);
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -105,7 +105,7 @@ const UserController = {
                 }
             }
 
-            logger.success(__filename, email || username, 'Updated users successfully');
+            logger.success(__filename, email || username, 'Updated user(s)');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -135,7 +135,7 @@ const UserController = {
                 permissions: permissionMapping.length ? permissionMapping : user.dataValues.permissions,
             })
 
-            logger.success(__filename, email, 'Updated user successfully');
+            logger.success(__filename, email, 'Updated user');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -156,7 +156,7 @@ const UserController = {
             }
 
             await userServices.deleteOne({id: user.dataValues.id});
-            logger.success(__filename, email, 'Delete user successfully');
+            logger.success(__filename, email, 'Delete user');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -180,7 +180,7 @@ const UserController = {
                 }
             }
 
-            logger.success(__filename, email, 'Delete users successfully');
+            logger.success(__filename, email, 'Delete user(s)');
             response.success(res, 200, '', 'OK');
         } catch (error) {
             const message = error.message ? error.message : error;

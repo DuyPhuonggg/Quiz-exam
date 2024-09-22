@@ -11,7 +11,7 @@ userRouter.get("/all", userController.findAll);
 userRouter.get("/:id", userController.findById);
 userRouter.patch("/bulk", validateMiddleware.bulkUpdatedUser, userController.bulkUpdate);
 userRouter.patch("/:id", validateMiddleware.updatedUser, userController.updatedOne);
-userRouter.delete("/bulk", validateMiddleware.bulkDeleteUser, userController.bulkDelete);
+userRouter.delete("/bulk", validateMiddleware.bulkDeleteById, userController.bulkDelete);
 userRouter.delete("/:id", userController.deleteOne);
 
 module.exports = userRouter;

@@ -17,11 +17,11 @@ const ExternalController =  {
 
             if (!public_id || !url) {
                 await fs.unlinkSync(filePath);
-                logger.error(__filename, email || username, 'UPLOAD FILE FAILED');
+                logger.info(__filename, email || username, 'Upload file failed');
                 return response.error(res, 400, 'Upload failed');
             }
             await fs.unlinkSync(filePath);
-            logger.success(__filename, email || username, 'UPLOAD SINGLE FILE SUCCESS');
+            logger.success(__filename, email || username, 'Upload single file');
             response.success(res, 200, {publicId: public_id, url}, 'Upload file successfully');
         } catch (error) {
             const message = error.message ? error.message : error;
@@ -34,12 +34,12 @@ const ExternalController =  {
         const {public_id: publicId} = req.body;
         try {
             if (!publicId) {
-                logger.error(__filename, email || username, 'DELETE FILE FAILED');
+                logger.info(__filename, email || username, 'Delete file failed');
                 return response.error(res, 400, 'Delete file failed');
             }
 
             await externalService.deleteOne(publicId);
-            logger.success(__filename, email || username, 'DELETE SINGLE FILE SUCCESS');
+            logger.success(__filename, email || username, 'Delete single file');
             response.success(res, 200, "", 'Delete file successfully');
         } catch (error) {
             const message = error.message ? error.message : error;
